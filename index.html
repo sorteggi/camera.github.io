@@ -1,61 +1,44 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <title>micro:bit UART</title>
-    <script type="text/javascript" src="C:/Users/loren/Downloads/biunoisa/node_modules/microbit-web-bluetooth/dist/microbit.umd.js"></script>
-</head>
-<body>
-    <button id="connect">Connect</button>
-    <input type="text" id="inputText" placeholder="Enter text" />
-    <button id="sendText">Send Text</button>
-    
-    <div id="log" style="white-space: pre"></div>
-    
-    <script>
-        const logEl = document.getElementById("log");
-        const log = (message) => logEl.innerHTML = `${message}\n${logEl.innerHTML}`;
-        
-        let services = null;
+  <head>
+    <title>Firebase File Upload</title>
 
-        document.getElementById("connect").onclick = async () => {
-            try {
-                const device = await microbit.requestMicrobit(window.navigator.bluetooth);
-                if (device) {
-                    services = await microbit.getServices(device);
-                    
-                    if (services.uartService) {
-                        log("Connected to micro:bit. UART Service available.");
-                    } else {
-                        log("Failed to connect to UART Service.");
-                    }
-                }
-            } catch (error) {
-                log(`Error connecting to micro:bit: ${error.message}`);
-            }
-        };
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1"
+    />
+  </head>
+  
+  <body>
+    <input type="number" id="valuex" placeholder="x">
+    <input type="number" id="valuey" placeholder="y">
+    <button id="submit">Submit</button>
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+      const firebaseConfig = {
+        apiKey: "AIzaSyDvvM6v5KTT5AWn0W1_xEU7WmYb32ycD08",
+        authDomain: "came-54f87.firebaseapp.com",
+        databaseURL: "https://came-54f87-default-rtdb.europe-west1.firebasedatabase.app",
+        projectId: "came-54f87",
+        storageBucket: "came-54f87.appspot.com",
+        messagingSenderId: "806978345562",
+        appId: "1:806978345562:web:6290b3bb8812268e2d9663",
+        measurementId: "G-EDHCEV8KX5"
+      };
+      const app = initializeApp(firebaseConfig);
 
-        document.getElementById("sendText").onclick = async () => {
-    const inputElement = document.getElementById("inputText");
-    const text = inputElement.value;
-
-    if (services && services.uartService && text) {
-        // Append newline character (\n) to the input text
-        const textWithNewline = text + "\n";
-
-        // Convert the input text (with newline) to Uint8Array
-        const encoder = new TextEncoder();
-        const encodedText = encoder.encode(textWithNewline);
-
-        try {
-            // Send the encoded text to the micro:bit
-            await services.uartService.send(encodedText);
-            log(`Sent text (with newline): ${textWithNewline}`);
-        } catch (error) {
-            log(`Error sending text: ${error.message}`);
-        }
-    }
-};
-
+      import {getDatabase, ref, child, get , set ,update, remove} from "https://www.gstatic.com/firebasejs/10.11.0/firebase-database.js";
+      const db = getDatabase();
+      let xinp = document.getElementById('valuex');
+      let yinp = document.getElementById('valuey');
+      let submitBTN = document.getElementById('submit');
+      function SUBMITTER(){
+        set(ref(db, 'position'),{
+            xpos : xinp.value,
+            ypos : yinp.value
+        })
+      }
+      submitBTN.addEventListener('click', SUBMITTER);
     </script>
-</body>
+  </body>
 </html>
