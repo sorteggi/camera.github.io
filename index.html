@@ -24,7 +24,7 @@
                     services = await microbit.getServices(device);
                     
                     if (services.uartService) {
-                        log("Connected to micro:bit. UART Service available.");
+                        log("Connected");
                     } else {
                         log("Failed to connect to UART Service.");
                     }
@@ -40,7 +40,7 @@
 
     if (services && services.uartService && text) {
         // Append newline character (\n) to the input text
-        const textWithNewline = text + "\n";
+        const textWithNewline = text + "\n";		
 
         // Convert the input text (with newline) to Uint8Array
         const encoder = new TextEncoder();
@@ -49,7 +49,7 @@
         try {
             // Send the encoded text to the micro:bit
             await services.uartService.send(encodedText);
-            log(`Sent text (with newline): ${textWithNewline}`);
+            log(`Sent: ${textWithNewline}`);
         } catch (error) {
             log(`Error sending text: ${error.message}`);
         }
