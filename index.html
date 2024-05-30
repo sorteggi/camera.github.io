@@ -5,13 +5,13 @@
     <meta content='width=500, initial-scale=1.0, maximum-scale=1.0, user-scalable=no' name='viewport' />
   </head>
   <body>
-    <div id="swipeArea"></div>
     <canvas id="border" width="500" height="1000"></canvas>
     <canvas id="mass" width="500" height="1000"></canvas>
     <canvas id="block" width="500" height="1000" ></canvas>
     <style>
       body {
             overflow: hidden; /* Disable scrolling/swiping */
+            -webkit-overflow-scrolling: touch; /* Specific to Safari */
             margin: 0; /* Remove default margin */
             padding: 0; /* Remove default padding */
         }
