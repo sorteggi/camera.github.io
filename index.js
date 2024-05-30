@@ -699,46 +699,60 @@ document.addEventListener('keydown', function(e) {
 });
 const blockCanvas = document.getElementById('block');
 let pointerStartX = 0;
-            let pointerCurrentX = 0;
+let pointerCurrentX = 0;
+let clickThreshold = 5; 
 
-            blockCanvas.addEventListener('pointerdown', function(event) {
-                pointerStartX = event.screenX;
-                pointerCurrentX = event.screenX;
-                event.preventDefault(); // Prevent any default action
-            }, false);
+blockCanvas.addEventListener('pointerdown', function(event) {
+    pointerStartX = event.screenX;
+    pointerCurrentX = event.screenX;
+    event.preventDefault(); // Prevent any default action
+}, false);
 
-            blockCanvas.addEventListener('pointermove', function(event) {
-                if (pointerStartX !== 0) {
-                    pointerCurrentX = event.screenX;
-                    handleSwipeWhileMoving();
-                    event.preventDefault(); // Prevent any default action
-                }
-            }, false);
-            
-            blockCanvas.addEventListener('pointerup', function(event) {
-                pointerStartX = 0; // Reset pointer start position
-                event.preventDefault(); // Prevent any default action
-            }, false);
+blockCanvas.addEventListener('pointermove', function(event) {
+    if (pointerStartX !== 0) {
+        pointerCurrentX = event.screenX;
+        event.preventDefault();
+        handleSwipeWhileMoving();
+    }
+}, false);
 
-            function handleSwipeWhileMoving() {
-                if (pointerCurrentX > pointerStartX + 50) {
-                    if (check(x + 50, y, rotation, false) === true) {
-                        x += 50;
-                        ctx.clearRect(0, 0, blockCanvas.width, blockCanvas.height);
-                        show();
-                        lockDelayStart = null;
-                    }
-                    pointerStartX = pointerCurrentX; // Reset start position to allow continuous swiping
-                } else if (pointerCurrentX < pointerStartX - 50) {
-                    if (check(x - 50, y, rotation, false) === true) {
-                        x -= 50;
-                        ctx.clearRect(0, 0, blockCanvas.width, blockCanvas.height);
-                        show();
-                        lockDelayStart = null;
-                    }
-                    pointerStartX = pointerCurrentX; // Reset start position to allow continuous swiping
-                }
-            }
+blockCanvas.addEventListener('pointerup', function(event) {
+    if (Math.abs(pointerStartX - pointerCurrentX) < clickThreshold) {
+        handleShortClick();
+    }
+    pointerStartX = 0; // Reset pointer start position
+    event.preventDefault(); // Prevent any default action
+}, false);
+
+function handleShortClick() {
+    if(check(x,y,(rotation+1)%4,false)==true){
+        rotation=(rotation+1)%4;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        show();
+        lockDelayStart = null;
+    }
+}
+
+function handleSwipeWhileMoving() {
+    if (pointerCurrentX > pointerStartX + 50) {
+        if (check(x + 50, y, rotation, false) === true) {
+            x += 50;
+            ctx.clearRect(0, 0, blockCanvas.width, blockCanvas.height);
+            show();
+            lockDelayStart = null;
+        }
+        pointerStartX = pointerCurrentX; // Reset start position to allow continuous swiping
+    } 
+    else if (pointerCurrentX < pointerStartX - 50) {
+        if (check(x - 50, y, rotation, false) === true) {
+            x -= 50;
+            ctx.clearRect(0, 0, blockCanvas.width, blockCanvas.height);
+            show();
+            lockDelayStart = null;
+        }
+        pointerStartX = pointerCurrentX; // Reset start position to allow continuous swiping
+    }
+}
 
             
 window.requestAnimationFrame(draw);
