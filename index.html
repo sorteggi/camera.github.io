@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Tetris</title>
+    
+  </head>
+  <body>
+    <div id="swipeArea"></div>
+    <canvas id="border" width="500" height="1000"></canvas>
+    <canvas id="mass" width="500" height="1000"></canvas>
+    <canvas id="block" width="500" height="1000" ></canvas>
+    <style>
+        canvas {
+            position: absolute;
+        }
+        #border {
+            border: 1px solid black;
+        }
+        #swipeArea {
+            width: 100%;
+            height: 100vh;
+            background-color: transparent;
+            position: absolute;
+            top: 0;
+            left: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            pointer-events: auto; /* Ensure it can still receive pointer events */
+        }
+    </style>
+	<script src="index.js"></script>
+  </body>
+</html>
