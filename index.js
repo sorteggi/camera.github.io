@@ -701,7 +701,7 @@ document.addEventListener('keydown', function(e) {
 const blockCanvas = document.getElementById('block');
 let pointerStartX = 0;
 let pointerCurrentX = 0;
-let clickThreshold = 1; 
+let clickThreshold = 0; 
 
 blockCanvas.addEventListener('pointerdown', function(event) {
     pointerStartX = event.screenX;
@@ -718,7 +718,7 @@ blockCanvas.addEventListener('pointermove', function(event) {
 }, false);
 
 blockCanvas.addEventListener('pointerup', function(event) {
-    if (Math.abs(pointerStartX - pointerCurrentX) < clickThreshold) {
+    if (pointerStartX == pointerCurrentX) {
         handleShortClick();
     }
     pointerStartX = 0; // Reset pointer start position
