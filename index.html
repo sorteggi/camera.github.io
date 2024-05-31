@@ -3,12 +3,21 @@
   <head>
     <title>Tetris</title>
     <style>
+      html, body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        overflow: hidden; /* Prevent scrolling of the entire page */
+      }
+      
       #tetris-container {
         position: relative;
-        width: 700px;
-        height: 1200px;
-        border: 100px solid blue; /* Adjust the thickness of the border here */
+        width: 100vw; /* Full viewport width */
+        height: 100vh; /* Full viewport height */
+        border: 10px solid blue; /* Adjust the thickness of the border here */
         box-sizing: border-box;
+        overflow: hidden; /* Prevent scrolling inside the container */
+        touch-action: none; /* Disable touch actions on this element */
       }
 
       canvas {
@@ -29,6 +38,12 @@
       <canvas id="mass" width="500" height="1000"></canvas>
       <canvas id="block" width="500" height="1000"></canvas>
     </div>
+    <script>
+      // Prevent touch scrolling on the container
+      document.getElementById('tetris-container').addEventListener('touchstart', function(e) {
+        e.preventDefault();
+      }, { passive: false });
+    </script>
     <script src="index.js"></script>
   </body>
 </html>
