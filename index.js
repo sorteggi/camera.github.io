@@ -350,7 +350,7 @@ let pointerStartX = 0;
 let pointerCurrentX = 0;
 let isSwiping = false;
 let lastTapTime = 0;
-const tapDebounceTime = 30; // Time in milliseconds to debounce taps
+const tapDebounceTime = 100; // Time in milliseconds to debounce taps
 
 blockCanvas.addEventListener('pointerdown', function(event) {
     pointerStartX = event.screenX;
