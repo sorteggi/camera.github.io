@@ -349,6 +349,8 @@ const blockCanvas = document.getElementById('block');
 let pointerStartX = 0;
 let pointerCurrentX = 0;
 let isSwiping = false;
+let lastTapTime = 0;
+const tapDebounceTime = 30; // Time in milliseconds to debounce taps
 
 blockCanvas.addEventListener('pointerdown', function(event) {
     pointerStartX = event.screenX;
@@ -366,8 +368,12 @@ blockCanvas.addEventListener('pointermove', function(event) {
 }, false);
 
 blockCanvas.addEventListener('pointerup', function(event) {
+    const currentTime = Date.now();
     if (!isSwiping && pointerStartX === pointerCurrentX) {
-        rotate();
+        if (currentTime - lastTapTime > tapDebounceTime) {
+            rotate();
+            lastTapTime = currentTime;
+        }
     }
     pointerStartX = 0; // Reset pointer start position
     event.preventDefault(); // Prevent any default action
@@ -395,6 +401,7 @@ function handleSwipeWhileMoving() {
         isSwiping = true; // Set swiping flag
     }
 }
+
 
 
 function assign(){
