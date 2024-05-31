@@ -735,7 +735,7 @@ function handleShortClick() {
 }
 
 function handleSwipeWhileMoving() {
-    if (pointerCurrentX > pointerStartX + 15) {
+    if (pointerCurrentX > pointerStartX + 20) {
         if (check(x + 50, y, rotation, false) === true) {
             x += 50;
             ctx.clearRect(0, 0, blockCanvas.width, blockCanvas.height);
@@ -744,7 +744,7 @@ function handleSwipeWhileMoving() {
         }
         pointerStartX = pointerCurrentX; // Reset start position to allow continuous swiping
     } 
-    else if (pointerCurrentX < pointerStartX - 15) {
+    else if (pointerCurrentX < pointerStartX - 20) {
         if (check(x - 50, y, rotation, false) === true) {
             x -= 50;
             ctx.clearRect(0, 0, blockCanvas.width, blockCanvas.height);
