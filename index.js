@@ -5,31 +5,18 @@ const mtx = mass.getContext("2d");
 let popo=0;
 let y=0;
 let x=150;
+let tet=[];
 let rotation=0;
 mtx.fillStyle = "white";
 mtx.fillRect(1, 1, 500, 1000);
 const sequence = ['I', 'RL', 'L', 'O', 'S', 'RS', 'T'];
 let Tetrimino=sequence[getRandomInt(0,7)];
-if(Tetrimino=="L"){
-    ctx.fillStyle = "orange";
-}
-else if(Tetrimino=="RL"){
-    ctx.fillStyle = "blue";
-}
-else if(Tetrimino=="S"){
-    ctx.fillStyle = "green";
-}
-else if(Tetrimino=="RS"){
-    ctx.fillStyle = "red";
-}
-else if(Tetrimino=="T"){
-    ctx.fillStyle = "purple";
-}
-else if(Tetrimino=="I"){
-    ctx.fillStyle = "cyan";
+if(Tetrimino=="I"){
+    x-=50;
+    y-=100;
 }
 else if(Tetrimino=="O"){
-    ctx.fillStyle = "yellow";
+    x+=50;
 }
 let lastFrameTime = performance.now();
 const playfield = [];
@@ -40,12 +27,13 @@ playfield[20] = [];
 for (let col = 0; col < 12; col++) {
     playfield[20][col] = 1;
 }
+assign();
 let lockDelayStart = null;
 const lockDelayDuration = 500;
 function draw() {
     const currentTime = performance.now();
     const elapsedTime = currentTime - lastFrameTime;
-    if (elapsedTime >= 20) {
+    if (elapsedTime >= 30) {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         show();
         clear();
@@ -62,23 +50,16 @@ function draw() {
                 y = 0;
                 x = 150;
                 Tetrimino = sequence[getRandomInt(0, 7)];
-                rotation = 0;
-                if (Tetrimino == "L") {
-                    ctx.fillStyle = "orange";
-                } else if (Tetrimino == "RL") {
-                    ctx.fillStyle = "blue";
-                } else if (Tetrimino == "S") {
-                    ctx.fillStyle = "green";
-                } else if (Tetrimino == "RS") {
-                    ctx.fillStyle = "red";
-                } else if (Tetrimino == "T") {
-                    ctx.fillStyle = "purple";
-                } else if (Tetrimino == "I") {
-                    ctx.fillStyle = "cyan";
-                } else if (Tetrimino == "O") {
-                    ctx.fillStyle = "yellow";
+                if(Tetrimino=="I"){
+                    x-=50;
+                    y-=100;
                 }
-                lockDelayStart = null; 
+                else if(Tetrimino=="O"){
+                    x+=50;
+                }
+                rotation = 0;
+                assign();
+                lockDelayStart = null;
             }
         }
         lastFrameTime = currentTime;
@@ -104,91 +85,12 @@ function clear(){
     }
 }
 function show(){
-    if(Tetrimino=="L"){
-        if(rotation == 0){
-            ctx.fillRect(x+100, y, 50, 50);
-            ctx.fillRect(x, y+50, 150, 50);
+    for(let i=0;i<tet.length;i++){
+        for(let j=0;j<tet[i].length;j++){
+            if(tet[i][j]==1){
+                ctx.fillRect(x+(j*50),y+(i*50),50,50);
+            }
         }
-        else if(rotation == 1){
-            ctx.fillRect(x+50, y, 50, 150);
-            ctx.fillRect(x+100, y+100, 50, 50);
-        }
-        else if(rotation == 2){
-            ctx.fillRect(x, y+100, 50, 50);
-            ctx.fillRect(x, y+50, 150, 50);
-        }
-        else if(rotation == 3){
-            ctx.fillRect(x+50, y, 50, 150);
-            ctx.fillRect(x, y, 50, 50);
-        }
-    }
-    else if(Tetrimino=="RL"){
-        if(rotation == 0){
-            ctx.fillRect(x, y, 50, 50);
-            ctx.fillRect(x, y+50, 150, 50);
-        }
-        else if(rotation == 1){
-            ctx.fillRect(x+50, y, 50, 150);
-            ctx.fillRect(x+100, y, 50, 50);
-        }
-        else if(rotation == 2){
-            ctx.fillRect(x+100, y+100, 50, 50);
-            ctx.fillRect(x, y+50, 150, 50);
-        }
-        else if(rotation == 3){
-            ctx.fillRect(x+50, y, 50, 150);
-            ctx.fillRect(x, y+100, 50, 50);
-        }
-    }
-    else if(Tetrimino=="S"){
-        if(rotation == 0 || rotation == 2){
-            ctx.fillRect(x+50, y, 100, 50);
-            ctx.fillRect(x, y+50, 100, 50);
-        }
-        else {
-            ctx.fillRect(x, y, 50, 100);
-            ctx.fillRect(x+50, y+50, 50, 100);
-        }
-    }
-    else if(Tetrimino=="RS"){
-        if(rotation == 0 || rotation == 2){
-            ctx.fillRect(x, y, 100, 50);
-            ctx.fillRect(x+50, y+50, 100, 50);
-        }
-        else {
-            ctx.fillRect(x+50, y, 50, 100);
-            ctx.fillRect(x, y+50, 50, 100);
-        }
-    }
-    else if(Tetrimino=="T"){
-        if(rotation == 0){
-            ctx.fillRect(x+50, y, 50, 50);
-            ctx.fillRect(x, y+50, 150, 50);
-        }
-        else if(rotation == 1){
-            ctx.fillRect(x+100, y+50, 50, 50);
-            ctx.fillRect(x+50, y, 50, 150);
-        }
-        else if(rotation == 2){
-            ctx.fillRect(x, y+50, 150, 50);
-            ctx.fillRect(x+50, y+100, 50, 50);
-        }
-        else if(rotation == 3){
-            
-            ctx.fillRect(x+50, y, 50, 150);
-            ctx.fillRect(x, y+50, 50, 50);
-        }
-    }
-    else if(Tetrimino=="I"){
-        if(rotation == 0 || rotation == 2){
-            ctx.fillRect(x, y,200, 50);
-        }
-        else {
-            ctx.fillRect(x, y,50, 200);
-        }
-    }
-    else if(Tetrimino=="O"){
-        ctx.fillRect(x, y, 100, 100);
     }
 }
 function getRandomInt(min, max) {
@@ -196,480 +98,228 @@ function getRandomInt(min, max) {
     const maxFloored = Math.floor(max);
     return Math.floor(Math.random() * (maxFloored - minCeiled) + minCeiled);
 }
-function check(x1,y1,rotation,stop){
+function check(x1,y1,rot,stop){
+    let te=rotation;
+    rotation=rot;
+    assign();
     let col = x1/50;col++;
     let row = y1/50;
     let tcol =x/50;tcol++;
     let trow= y/50;
-    if(Tetrimino=="L"){
-        if(rotation == 0){
-            let tet = [
-                [0, 0, 1],
-                [1, 1, 1],
-                [0, 0, 0],
-            ];
-            for(let i=0;i<3;i++){
-                for(let j=0;j<3;j++){
-                    if(tet[i][j]==1&&playfield[i+row][j+col]==1){
-                        if(stop){
-                            for(let a=0;a<3;a++){
-                                for(let b=0;b<3;b++){
-                                    if(tet[a][b]==1){
-                                        playfield[a+trow][b+tcol]=1;
-                                    }
-                                }
+    for(let i=0;i<tet.length;i++){
+        for(let j=0;j<tet[i].length;j++){
+            if(tet[i][j]==1&&playfield[i+row][j+col]==1){
+                if(stop){
+                    for(let a=0;a<tet.length;a++){
+                        for(let b=0;b<tet[i].length;b++){
+                            if(tet[a][b]==1){
+                                playfield[a+trow][b+tcol]=1;
                             }
                         }
-                        return false;
                     }
                 }
+                rotation=te;
+                assign();
+                return false;
             }
-            return true;
-        }
-        else if(rotation == 1){
-            let tet = [
-                [0, 1, 0],
-                [0, 1, 0],
-                [0, 1, 1],
-            ];
-            for(let i=0;i<3;i++){
-                for(let j=0;j<3;j++){
-                    if(tet[i][j]==1&&playfield[i+row][j+col]==1){
-                        if(stop){
-                            for(let a=0;a<3;a++){
-                                for(let b=0;b<3;b++){
-                                    if(tet[a][b]==1){
-                                        playfield[a+trow][b+tcol]=1;
-                                    }
-                                }
-                            }
-                        }
-                        return false;
-                    }
-                }
-            }
-            return true;
-        }
-        else if(rotation == 2){
-            let tet = [
-                [0, 0, 0],
-                [1, 1, 1],
-                [1, 0, 0],
-            ];
-            for(let i=0;i<3;i++){
-                for(let j=0;j<3;j++){
-                    if(tet[i][j]==1&&playfield[i+row][j+col]==1){
-                        if(stop){
-                            for(let a=0;a<3;a++){
-                                for(let b=0;b<3;b++){
-                                    if(tet[a][b]==1){
-                                        playfield[a+trow][b+tcol]=1;
-                                    }
-                                }
-                            }
-                        }
-                        return false;
-                    }
-                }
-            }
-            return true;
-        }
-        else if(rotation == 3){
-            let tet = [
-                [1, 1, 0],
-                [0, 1, 0],
-                [0, 1, 0],
-            ];
-            for(let i=0;i<3;i++){
-                for(let j=0;j<3;j++){
-                    if(tet[i][j]==1&&playfield[i+row][j+col]==1){
-                        if(stop){
-                            for(let a=0;a<3;a++){
-                                for(let b=0;b<3;b++){
-                                    if(tet[a][b]==1){
-                                        playfield[a+trow][b+tcol]=1;
-                                    }
-                                }
-                            }
-                        }
-                        return false;
-                    }
-                }
-            }
-            return true;
         }
     }
-    else if(Tetrimino=="RL"){
-        if(rotation == 0){
-            let tet = [
-                [1, 0, 0],
-                [1, 1, 1],
-                [0, 0, 0],
-            ];
-            for(let i=0;i<3;i++){
-                for(let j=0;j<3;j++){
-                    if(tet[i][j]==1&&playfield[i+row][j+col]==1){
-                        if(stop){
-                            for(let a=0;a<3;a++){
-                                for(let b=0;b<3;b++){
-                                    if(tet[a][b]==1){
-                                        playfield[a+trow][b+tcol]=1;
-                                    }
-                                }
-                            }
-                        }
-                        return false;
-                    }
-                }
-            }
-            return true;
-        }
-        else if(rotation == 1){
-            let tet = [
-                [0, 1, 1],
-                [0, 1, 0],
-                [0, 1, 0],
-            ];
-            for(let i=0;i<3;i++){
-                for(let j=0;j<3;j++){
-                    if(tet[i][j]==1&&playfield[i+row][j+col]==1){
-                        if(stop){
-                            for(let a=0;a<3;a++){
-                                for(let b=0;b<3;b++){
-                                    if(tet[a][b]==1){
-                                        playfield[a+trow][b+tcol]=1;
-                                    }
-                                }
-                            }
-                        }
-                        return false;
-                    }
-                }
-            }
-            return true;
-        }
-        else if(rotation == 2){
-            let tet = [
-                [0, 0, 0],
-                [1, 1, 1],
-                [0, 0, 1],
-            ];
-            for(let i=0;i<3;i++){
-                for(let j=0;j<3;j++){
-                    if(tet[i][j]==1&&playfield[i+row][j+col]==1){
-                        if(stop){
-                            for(let a=0;a<3;a++){
-                                for(let b=0;b<3;b++){
-                                    if(tet[a][b]==1){
-                                        playfield[a+trow][b+tcol]=1;
-                                    }
-                                }
-                            }
-                        }
-                        return false;
-                    }
-                }
-            }
-            return true;
-        }
-        else if(rotation == 3){
-            let tet = [
-                [0, 1, 0],
-                [0, 1, 0],
-                [1, 1, 0],
-            ];
-            for(let i=0;i<3;i++){
-                for(let j=0;j<3;j++){
-                    if(tet[i][j]==1&&playfield[i+row][j+col]==1){
-                        if(stop){
-                            for(let a=0;a<3;a++){
-                                for(let b=0;b<3;b++){
-                                    if(tet[a][b]==1){
-                                        playfield[a+trow][b+tcol]=1;
-                                    }
-                                }
-                            }
-                        }
-                        return false;
-                    }
-                }
-            }
-            return true;
-        }
+    rotation=te;
+    assign();
+    return true;
+}
+function rotate(){
+    if(check(x,y,(rotation+1)%4,false)==true){
+        rotation=(rotation+1)%4;
     }
-    else if(Tetrimino=="S"){
-        if(rotation == 0 || rotation == 2){
-            let tet = [
-                [0, 1, 1],
-                [1, 1, 0],
-                [0, 0, 0],
-            ];
-            for(let i=0;i<3;i++){
-                for(let j=0;j<3;j++){
-                    if(tet[i][j]==1&&playfield[i+row][j+col]==1){
-                        if(stop){
-                            for(let a=0;a<3;a++){
-                                for(let b=0;b<3;b++){
-                                    if(tet[a][b]==1){
-                                        playfield[a+trow][b+tcol]=1;
-                                    }
-                                }
-                            }
-                        }
-                        return false;
-                    }
-                }
+    else if(Tetrimino!="I"&&Tetrimino!="O"){
+        if(rotation==0){
+            if(check(x-50,y,(rotation+1)%4,false)==true){
+                x-=50;
+                rotation=(rotation+1)%4;
             }
-            return true;
+            else if(check(x-50,y+50,(rotation+1)%4,false)==true){
+                x-=50;
+                y+=50;
+                rotation=(rotation+1)%4;
+            }
+            else if(check(x,y-100,(rotation+1)%4,false)==true){
+                y-=100;
+                rotation=(rotation+1)%4;
+            }
+            else if(check(x-50,y-100,(rotation+1)%4,false)==true){
+                x-=50;
+                y-=100;
+                rotation=(rotation+1)%4;
+            }
         }
-        else {
-            let tet = [
-                [1, 0, 0],
-                [1, 1, 0],
-                [0, 1, 0],
-            ];
-            for(let i=0;i<3;i++){
-                for(let j=0;j<3;j++){
-                    if(tet[i][j]==1&&playfield[i+row][j+col]==1){
-                        if(stop){
-                            for(let a=0;a<3;a++){
-                                for(let b=0;b<3;b++){
-                                    if(tet[a][b]==1){
-                                        playfield[a+trow][b+tcol]=1;
-                                    }
-                                }
-                            }
-                        }
-                        return false;
-                    }
-                }
+        else if(rotation==1){
+            if(check(x+50,y,(rotation+1)%4,false)==true){
+                x+=50;
+                rotation=(rotation+1)%4;
             }
-            return true;
+            else if(check(x+50,y-50,(rotation+1)%4,false)==true){
+                x+=50;
+                y-=50;
+                rotation=(rotation+1)%4;
+            }
+            else if(check(x,y+100,(rotation+1)%4,false)==true){
+                y+=100;
+                rotation=(rotation+1)%4;
+            }
+            else if(check(x+50,y+100,(rotation+1)%4,false)==true){
+                x+=50;
+                y+=100;
+                rotation=(rotation+1)%4;
+            }
         }
-    }
-    else if(Tetrimino=="RS"){
-        if(rotation == 0 || rotation == 2){
-            let tet = [
-                [1, 1, 0],
-                [0, 1, 1],
-                [0, 0, 0],
-            ];
-            for(let i=0;i<3;i++){
-                for(let j=0;j<3;j++){
-                    if(tet[i][j]==1&&playfield[i+row][j+col]==1){
-                        if(stop){
-                            for(let a=0;a<3;a++){
-                                for(let b=0;b<3;b++){
-                                    if(tet[a][b]==1){
-                                        playfield[a+trow][b+tcol]=1;
-                                    }
-                                }
-                            }
-                        }
-                        return false;
-                    }
-                }
+        else if(rotation==2){
+            if(check(x+50,y,(rotation+1)%4,false)==true){
+                x+=50;
+                rotation=(rotation+1)%4;
             }
-            return true;
+            else if(check(x+50,y+50,(rotation+1)%4,false)==true){
+                x+=50;
+                y+=50;
+                rotation=(rotation+1)%4;
+            }
+            else if(check(x,y-100,(rotation+1)%4,false)==true){
+                y-=100;
+                rotation=(rotation+1)%4;
+            }
+            else if(check(x+50,y-100,(rotation+1)%4,false)==true){
+                x+=50;
+                y-=100;
+                rotation=(rotation+1)%4;
+            }
         }
-        else {
-            let tet = [
-                [0, 1, 0],
-                [1, 1, 0],
-                [1, 0, 0],
-            ];
-            for(let i=0;i<3;i++){
-                for(let j=0;j<3;j++){
-                    if(tet[i][j]==1&&playfield[i+row][j+col]==1){
-                        if(stop){
-                            for(let a=0;a<3;a++){
-                                for(let b=0;b<3;b++){
-                                    if(tet[a][b]==1){
-                                        playfield[a+trow][b+tcol]=1;
-                                    }
-                                }
-                            }
-                        }
-                        return false;
-                    }
-                }
+        else{
+            if(check(x-50,y,(rotation+1)%4,false)==true){
+                x-=50;
+                rotation=(rotation+1)%4;
             }
-            return true;
-        }
-    }
-    else if(Tetrimino=="T"){
-        if(rotation == 0){
-            let tet = [
-                [0, 1, 0],
-                [1, 1, 1],
-                [0, 0, 0],
-            ];
-            for(let i=0;i<3;i++){
-                for(let j=0;j<3;j++){
-                    if(tet[i][j]==1&&playfield[i+row][j+col]==1){
-                        if(stop){
-                            for(let a=0;a<3;a++){
-                                for(let b=0;b<3;b++){
-                                    if(tet[a][b]==1){
-                                        playfield[a+trow][b+tcol]=1;
-                                    }
-                                }
-                            }
-                        }
-                        return false;
-                    }
-                }
+            else if(check(x-50,y-50,(rotation+1)%4,false)==true){
+                x-=50;
+                y-=50;
+                rotation=(rotation+1)%4;
             }
-            return true;
-        }
-        else if(rotation == 1){
-            let tet = [
-                [0, 1, 0],
-                [0, 1, 1],
-                [0, 1, 0],
-            ];
-            for(let i=0;i<3;i++){
-                for(let j=0;j<3;j++){
-                    if(tet[i][j]==1&&playfield[i+row][j+col]==1){
-                        if(stop){
-                            for(let a=0;a<3;a++){
-                                for(let b=0;b<3;b++){
-                                    if(tet[a][b]==1){
-                                        playfield[a+trow][b+tcol]=1;
-                                    }
-                                }
-                            }
-                        }
-                        return false;
-                    }
-                }
+            else if(check(x,y+100,(rotation+1)%4,false)==true){
+                y+=100;
+                rotation=(rotation+1)%4;
             }
-            return true;
-        }
-        else if(rotation == 2){
-            let tet = [
-                [0, 0, 0],
-                [1, 1, 1],
-                [0, 1, 0],
-            ];
-            for(let i=0;i<3;i++){
-                for(let j=0;j<3;j++){
-                    if(tet[i][j]==1&&playfield[i+row][j+col]==1){
-                        if(stop){
-                            for(let a=0;a<3;a++){
-                                for(let b=0;b<3;b++){
-                                    if(tet[a][b]==1){
-                                        playfield[a+trow][b+tcol]=1;
-                                    }
-                                }
-                            }
-                        }
-                        return false;
-                    }
-                }
+            else if(check(x-50,y+100,(rotation+1)%4,false)==true){
+                x-=50;
+                y+=100;
+                rotation=(rotation+1)%4;
             }
-            return true;
-        }
-        else if(rotation == 3){
-            let tet = [
-                [0, 1, 0],
-                [1, 1, 0],
-                [0, 1, 0],
-            ];
-            for(let i=0;i<3;i++){
-                for(let j=0;j<3;j++){
-                    if(tet[i][j]==1&&playfield[i+row][j+col]==1){
-                        if(stop){
-                            for(let a=0;a<3;a++){
-                                for(let b=0;b<3;b++){
-                                    if(tet[a][b]==1){
-                                        playfield[a+trow][b+tcol]=1;
-                                    }
-                                }
-                            }
-                        }
-                        return false;
-                    }
-                }
-            }
-            return true;
         }
     }
     else if(Tetrimino=="I"){
-        if(rotation == 0 || rotation == 2){
-            let tet = [
-                [1, 1, 1, 1],
-                [0, 0, 0, 0],
-                [0, 0, 0, 0],
-                [0, 0, 0, 0],
-            ];
-            for(let i=0;i<4;i++){
-                for(let j=0;j<4;j++){
-                    if(tet[i][j]==1&&playfield[i+row][j+col]==1){
-                        if(stop){
-                            for(let a=0;a<4;a++){
-                                for(let b=0;b<4;b++){
-                                    if(tet[a][b]==1){
-                                        playfield[a+trow][b+tcol]=1;
-                                    }
-                                }
-                            }
-                        }
-                        return false;
-                    }
-                }
+        if(rotation==0){
+            if(check(x+50,y,(rotation+1)%4,false)==true){
+                x+=50;
+                rotation=(rotation+1)%4;
             }
-            return true;
+            else if(check(x-50,y,(rotation+1)%4,false)==true){
+                x-=50;
+                rotation=(rotation+1)%4;
+            }
+            else if(check(x+100,y,(rotation+1)%4,false)==true){
+                x+=100;
+                rotation=(rotation+1)%4;
+            }
+            else if(check(x-50,y-50,(rotation+1)%4,false)==true){
+                x-=50;
+                y-=50;
+                rotation=(rotation+1)%4;
+            }
+            else if(check(x+100,y+100,(rotation+1)%4,false)==true){
+                x+=100;
+                y+=100;
+                rotation=(rotation+1)%4;
+            }
         }
-        else {
-            let tet = [
-                [1, 0, 0, 0],
-                [1, 0, 0, 0],
-                [1, 0, 0, 0],
-                [1, 0, 0, 0],
-            ];
-            for(let i=0;i<4;i++){
-                for(let j=0;j<4;j++){
-                    if(tet[i][j]==1&&playfield[i+row][j+col]==1){
-                        if(stop){
-                            for(let a=0;a<4;a++){
-                                for(let b=0;b<4;b++){
-                                    if(tet[a][b]==1){
-                                        playfield[a+trow][b+tcol]=1;
-                                    }
-                                }
-                            }
-                        }
-                        return false;
-                    }
-                }
+        else if(rotation==1){
+            if(check(x,y-50,(rotation+1)%4,false)==true){
+                y-=50;
+                rotation=(rotation+1)%4;
             }
-            return true;
+            else if(check(x-50,y-50,(rotation+1)%4,false)==true){
+                x-=50;
+                y-=50;
+                rotation=(rotation+1)%4;
+            }
+            else if(check(x+100,y+50,(rotation+1)%4,false)==true){
+                x+=100;
+                y+=50;
+                rotation=(rotation+1)%4;
+            }
+            else if(check(x-50,y+50,(rotation+1)%4,false)==true){
+                x-=50;
+                y+=50;
+                rotation=(rotation+1)%4;
+            }
+            else if(check(x+100,y-100,(rotation+1)%4,false)==true){
+                x+=100;
+                y-=100;
+                rotation=(rotation+1)%4;
+            }
+        }
+        else if(rotation==2){
+            if(check(x-50,y,(rotation+1)%4,false)==true){
+                x-=50;
+                rotation=(rotation+1)%4;
+            }
+            else if(check(x+50,y,(rotation+1)%4,false)==true){
+                x+=50;
+                rotation=(rotation+1)%4;
+            }
+            else if(check(x-100,y,(rotation+1)%4,false)==true){
+                x-=100;
+                rotation=(rotation+1)%4;
+            }
+            else if(check(x+50,y+50,(rotation+1)%4,false)==true){
+                x+=50;
+                y+=50;
+                rotation=(rotation+1)%4;
+            }
+            else if(check(x-100,y-100,(rotation+1)%4,false)==true){
+                x-=100;
+                y-=100;
+                rotation=(rotation+1)%4;
+            }
+        }
+        else{
+            if(check(x-50,y,(rotation+1)%4,false)==true){
+                x-=50;
+                rotation=(rotation+1)%4;
+            }
+            else if(check(x-50,y-50,(rotation+1)%4,false)==true){
+                x-=50;
+                y-=50;
+                rotation=(rotation+1)%4;
+            }
+            else if(check(x+100,y-50,(rotation+1)%4,false)==true){
+                x+=100;
+                y-=50;
+                rotation=(rotation+1)%4;
+            }
+            else if(check(x-50,y+50,(rotation+1)%4,false)==true){
+                x-=50;
+                y+=50;
+                rotation=(rotation+1)%4;
+            }
+            else if(check(x+100,y-100,(rotation+1)%4,false)==true){
+                x+=100;
+                y-=100;
+                rotation=(rotation+1)%4;
+            }
         }
     }
-    else if(Tetrimino=="O"){
-        let tet = [
-            [1, 1],
-            [1, 1],
-        ];
-        for(let i=0;i<2;i++){
-            for(let j=0;j<2;j++){
-                if(tet[i][j]==1&&playfield[i+row][j+col]==1){
-                    if(stop){
-                        for(let a=0;a<2;a++){
-                            for(let b=0;b<2;b++){
-                                if(tet[a][b]==1){
-                                    playfield[a+trow][b+tcol]=1;
-                                }
-                            }
-                        }
-                    }
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
+    assign();
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    show();
+    lockDelayStart = null;
 }
 document.addEventListener('keydown', function(e) {
     if (e.key == 'd' && check(x+50,y,rotation,false)==true ) {
@@ -691,99 +341,14 @@ document.addEventListener('keydown', function(e) {
         lockDelayStart = null;
     }
     else if (e.key == 'x') {
-        if(check(x,y,(rotation+1)%4,false)==true){
-            rotation=(rotation+1)%4;
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            show();
-            lockDelayStart = null;
-        }
-        else if (Tetrimino=="I"){
-            if(rotation==0){
-                if(check(x-50,y,(rotation+1)%4,false)==true){
-                    x-=50;
-                    rotation=(rotation+1)%4;
-                }
-                else if(check(x+100,y,(rotatixon+1)%4,false)==true){
-                    x+=100;
-                    rotation=(rotation+1)%4;
-                }
-                else if(check(x-50,y-50,(rotation+1)%4,false)==true){
-                    x-=50;
-                    y-=50;
-                    rotation=(rotation+1)%4;
-                }
-                else if(check(x+100,y+100,(rotation+1)%4,false)==true){
-                    x+=100;
-                    y+=100;
-                    rotation=(rotation+1)%4;
-                }
-            }
-            else if(rotation==1){
-                if(check(x,y,(rotation+1)%4,false)==true){
-                    rotation=(rotation+1)%4;
-                }
-                else if(check(x+150,y,(rotation+1)%4,false)==true){
-                    x+=150;
-                    rotation=(rotation+1)%4;
-                }
-                else if(check(x,y+100,(rotation+1)%4,false)==true){
-                    y+=100;
-                    rotation=(rotation+1)%4;
-                }
-                else if(check(x+150,y-50,(rotation+1)%4,false)==true){
-                    x+=150;
-                    y-=50;
-                    rotation=(rotation+1)%4;
-                }
-            }
-            else if(rotation==2){
-                if(check(x+150,y,(rotation+1)%4,false)==true){
-                    x+=150;
-                    rotation=(rotation+1)%4;
-                }
-                else if(check(x,y,(rotation+1)%4,false)==true){
-                    rotation=(rotation+1)%4;
-                }
-                else if(check(x+150,y+50,(rotation+1)%4,false)==true){
-                    x+=150;
-                    y+=50;
-                    rotation=(rotation+1)%4;
-                }
-                else if(check(x,y-100,(rotation+1)%4,false)==true){
-                    y-=100;
-                    rotation=(rotation+1)%4;
-                }
-            }
-            else if(rotation==3){
-                if(check(x+100,y,(rotation+1)%4,false)==true){
-                    x+=100;
-                    rotation=(rotation+1)%4;
-                }
-                else if(check(x-50,y,(rotation+1)%4,false)==true){
-                    x-=50;
-                    rotation=(rotation+1)%4;
-                }
-                else if(check(x+100,y-100,(rotation+1)%4,false)==true){
-                    x+=100;
-                    y-=100;
-                    rotation=(rotation+1)%4;
-                }
-                else if(check(x-50,y+50,(rotation+1)%4,false)==true){
-                    x-=50;
-                    y+=50;
-                    rotation=(rotation+1)%4;
-                }
-            }
-        }
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        show();
-        lockDelayStart = null;
+        rotate();
     }
 });
+
 const blockCanvas = document.getElementById('block');
 let pointerStartX = 0;
 let pointerCurrentX = 0;
-let clickThreshold = 0; 
+let clickThreshold = 2; 
 
 blockCanvas.addEventListener('pointerdown', function(event) {
     pointerStartX = event.screenX;
@@ -800,24 +365,16 @@ blockCanvas.addEventListener('pointermove', function(event) {
 }, false);
 
 blockCanvas.addEventListener('pointerup', function(event) {
-    if (pointerStartX == pointerCurrentX) {
-        handleShortClick();
+    if (Math.abs(pointerStartX - pointerCurrentX) < clickThreshold) {
+        rotate();
     }
     pointerStartX = 0; // Reset pointer start position
     event.preventDefault(); // Prevent any default action
 }, false);
 
-function handleShortClick() {
-    if(check(x,y,(rotation+1)%4,false)==true){
-        rotation=(rotation+1)%4;
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        show();
-        lockDelayStart = null;
-    }
-}
 
 function handleSwipeWhileMoving() {
-    if (pointerCurrentX > pointerStartX + 30) {
+    if (pointerCurrentX > pointerStartX + 20) {
         if (check(x + 50, y, rotation, false) === true) {
             x += 50;
             ctx.clearRect(0, 0, blockCanvas.width, blockCanvas.height);
@@ -826,7 +383,7 @@ function handleSwipeWhileMoving() {
         }
         pointerStartX = pointerCurrentX; // Reset start position to allow continuous swiping
     } 
-    else if (pointerCurrentX < pointerStartX - 30) {
+    else if (pointerCurrentX < pointerStartX - 20) {
         if (check(x - 50, y, rotation, false) === true) {
             x -= 50;
             ctx.clearRect(0, 0, blockCanvas.width, blockCanvas.height);
@@ -837,5 +394,226 @@ function handleSwipeWhileMoving() {
     }
 }
 
-            
+
+function assign(){
+    if(Tetrimino=="L"){
+        ctx.fillStyle = "orange";
+    }
+    else if(Tetrimino=="RL"){
+        ctx.fillStyle = "blue";
+    }
+    else if(Tetrimino=="S"){
+        ctx.fillStyle = "green";
+    }
+    else if(Tetrimino=="RS"){
+        ctx.fillStyle = "red";
+    }
+    else if(Tetrimino=="T"){
+        ctx.fillStyle = "purple";
+    }
+    else if(Tetrimino=="I"){
+        ctx.fillStyle = "cyan";
+    }
+    else if(Tetrimino=="O"){
+        ctx.fillStyle = "yellow";
+    }
+    if(Tetrimino=="L"){
+        if(rotation == 0){
+            tet = [
+                [0, 0, 1],
+                [1, 1, 1],
+                [0, 0, 0],
+            ];
+        }
+        else if(rotation == 1){
+            tet = [
+                [0, 1, 0],
+                [0, 1, 0],
+                [0, 1, 1],
+            ];
+        }
+        else if(rotation == 2){
+            tet = [
+                [0, 0, 0],
+                [1, 1, 1],
+                [1, 0, 0],
+            ];
+        }
+        else if(rotation == 3){
+            tet = [
+                [1, 1, 0],
+                [0, 1, 0],
+                [0, 1, 0],
+            ];
+        }
+    }
+    else if(Tetrimino=="RL"){
+        if(rotation == 0){
+            tet = [
+                [1, 0, 0],
+                [1, 1, 1],
+                [0, 0, 0],
+            ];
+        }
+        else if(rotation == 1){
+            tet = [
+                [0, 1, 1],
+                [0, 1, 0],
+                [0, 1, 0],
+            ];
+        }
+        else if(rotation == 2){
+            tet = [
+                [0, 0, 0],
+                [1, 1, 1],
+                [0, 0, 1],
+            ];
+        }
+        else if(rotation == 3){
+            tet = [
+                [0, 1, 0],
+                [0, 1, 0],
+                [1, 1, 0],
+            ];
+        }
+    }
+    else if(Tetrimino=="S"){
+        if(rotation == 0){
+            tet = [
+                [0, 1, 1],
+                [1, 1, 0],
+                [0, 0, 0],
+            ];
+        }
+        else if(rotation == 1){
+            tet = [
+                [0, 1, 0],
+                [0, 1, 1],
+                [0, 0, 1],
+            ];
+        }
+        else if(rotation == 2){
+            tet = [
+                
+                [0, 0, 0],
+                [0, 1, 1],
+                [1, 1, 0],
+            ];
+        }
+        else {
+            tet = [
+                [1, 0, 0],
+                [1, 1, 0],
+                [0, 1, 0],
+            ];
+        }
+    }
+    else if(Tetrimino=="RS"){
+        if(rotation == 0){
+            tet = [
+                [1, 1, 0],
+                [0, 1, 1],
+                [0, 0, 0],
+            ];
+        }
+        else if(rotation == 1){
+            tet = [
+                [0, 0, 1],
+                [0, 1, 1],
+                [0, 1, 0],
+            ];
+        }
+        else if(rotation == 2){
+            tet = [
+                
+                [0, 0, 0],
+                [1, 1, 0],
+                [0, 1, 1],
+            ];
+        }
+        else {
+            tet = [
+                [0, 1, 0],
+                [1, 1, 0],
+                [1, 0, 0],
+            ];
+        }
+    }
+    else if(Tetrimino=="T"){
+        if(rotation == 0){
+            tet = [
+                [0, 1, 0],
+                [1, 1, 1],
+                [0, 0, 0],
+            ];
+        }
+        else if(rotation == 1){
+            tet = [
+                [0, 1, 0],
+                [0, 1, 1],
+                [0, 1, 0],
+            ];
+        }
+        else if(rotation == 2){
+            tet = [
+                [0, 0, 0],
+                [1, 1, 1],
+                [0, 1, 0],
+            ];
+        }
+        else if(rotation == 3){
+            tet = [
+                [0, 1, 0],
+                [1, 1, 0],
+                [0, 1, 0],
+            ];
+        }
+    }
+    else if(Tetrimino=="I"){
+        if(Tetrimino=="I"){
+            if(rotation == 0){
+                tet = [
+                    [0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0],
+                    [0, 1, 1, 1, 1],
+                    [0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0],
+                ];
+            }
+            else if(rotation == 1){
+                tet = [
+                    [0, 0, 0, 0, 0],
+                    [0, 0, 1, 0, 0],
+                    [0, 0, 1, 0, 0],
+                    [0, 0, 1, 0, 0],
+                    [0, 0, 1, 0, 0],
+                ];
+            }else if(rotation == 2){
+                tet = [
+                    [0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0],
+                    [1, 1, 1, 1, 0],
+                    [0, 0, 0, 0, 0],
+                    [0, 0, 0, 0, 0],
+                ];
+            }
+            else {
+                tet = [
+                    [0, 0, 1, 0, 0],
+                    [0, 0, 1, 0, 0],
+                    [0, 0, 1, 0, 0],
+                    [0, 0, 1, 0, 0],
+                    [0, 0, 0, 0, 0],
+                ];
+            }
+        }
+    }
+    else if(Tetrimino=="O"){
+        tet = [
+            [1, 1],
+            [1, 1],
+        ];
+    }
+}
+
 window.requestAnimationFrame(draw);
