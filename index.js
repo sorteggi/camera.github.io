@@ -348,11 +348,12 @@ document.addEventListener('keydown', function(e) {
 const blockCanvas = document.getElementById('block');
 let pointerStartX = 0;
 let pointerCurrentX = 0;
-let clickThreshold = 2; 
+let isSwiping = false;
 
 blockCanvas.addEventListener('pointerdown', function(event) {
     pointerStartX = event.screenX;
     pointerCurrentX = event.screenX;
+    isSwiping = false; // Reset swiping flag
     event.preventDefault(); // Prevent any default action
 }, false);
 
@@ -365,13 +366,12 @@ blockCanvas.addEventListener('pointermove', function(event) {
 }, false);
 
 blockCanvas.addEventListener('pointerup', function(event) {
-    if (pointerStartX == pointerCurrentX) {
+    if (!isSwiping && pointerStartX === pointerCurrentX) {
         rotate();
     }
     pointerStartX = 0; // Reset pointer start position
     event.preventDefault(); // Prevent any default action
 }, false);
-
 
 function handleSwipeWhileMoving() {
     if (pointerCurrentX > pointerStartX + 20) {
@@ -382,6 +382,7 @@ function handleSwipeWhileMoving() {
             lockDelayStart = null;
         }
         pointerStartX = pointerCurrentX; // Reset start position to allow continuous swiping
+        isSwiping = true; // Set swiping flag
     } 
     else if (pointerCurrentX < pointerStartX - 20) {
         if (check(x - 50, y, rotation, false) === true) {
@@ -391,6 +392,7 @@ function handleSwipeWhileMoving() {
             lockDelayStart = null;
         }
         pointerStartX = pointerCurrentX; // Reset start position to allow continuous swiping
+        isSwiping = true; // Set swiping flag
     }
 }
 
