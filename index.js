@@ -2,7 +2,6 @@ const canvas = document.getElementById("block");
 const ctx = canvas.getContext("2d");
 const mass = document.getElementById("mass");
 const mtx = mass.getContext("2d");
-
 let popo=0;
 let y=0;
 let x=150;
