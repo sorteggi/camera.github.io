@@ -45,7 +45,7 @@ const lockDelayDuration = 500;
 function draw() {
     const currentTime = performance.now();
     const elapsedTime = currentTime - lastFrameTime;
-    if (elapsedTime >= 100) {
+    if (elapsedTime >= 20) {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         show();
         clear();
@@ -99,7 +99,7 @@ function clear(){
             mtx.drawImage(mtx.canvas, 0 , 0 , 500 , row*50 , 0 , 50 , 500 ,(row)*50);
             mtx.globalCompositeOperation = "source-over";
             playfield.splice(row, 1);
-            playfield.unshift([0,0,0,0,0,0,0,0,0,0]);  
+            playfield.unshift([1,0,0,0,0,0,0,0,0,0,0,1]);  
         }
     }
 }
@@ -693,85 +693,86 @@ document.addEventListener('keydown', function(e) {
     else if (e.key == 'x') {
         if(check(x,y,(rotation+1)%4,false)==true){
             rotation=(rotation+1)%4;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            show();
+            lockDelayStart = null;
         }
-        else if(rotation==0){
-            if(check(x-50,y,(rotation+1)%4,false)==true){
-                x-=50;
-                rotation=(rotation+1)%4;
+        else if (Tetrimino=="I"){
+            if(rotation==0){
+                if(check(x-50,y,(rotation+1)%4,false)==true){
+                    x-=50;
+                    rotation=(rotation+1)%4;
+                }
+                else if(check(x+100,y,(rotatixon+1)%4,false)==true){
+                    x+=100;
+                    rotation=(rotation+1)%4;
+                }
+                else if(check(x-50,y-50,(rotation+1)%4,false)==true){
+                    x-=50;
+                    y-=50;
+                    rotation=(rotation+1)%4;
+                }
+                else if(check(x+100,y+100,(rotation+1)%4,false)==true){
+                    x+=100;
+                    y+=100;
+                    rotation=(rotation+1)%4;
+                }
             }
-            else if(check(x-50,y+50,(rotation+1)%4,false)==true){
-                x-=50;
-                y+=50;
-                rotation=(rotation+1)%4;
+            else if(rotation==1){
+                if(check(x,y,(rotation+1)%4,false)==true){
+                    rotation=(rotation+1)%4;
+                }
+                else if(check(x+150,y,(rotation+1)%4,false)==true){
+                    x+=150;
+                    rotation=(rotation+1)%4;
+                }
+                else if(check(x,y+100,(rotation+1)%4,false)==true){
+                    y+=100;
+                    rotation=(rotation+1)%4;
+                }
+                else if(check(x+150,y-50,(rotation+1)%4,false)==true){
+                    x+=150;
+                    y-=50;
+                    rotation=(rotation+1)%4;
+                }
             }
-            else if(check(x,y-100,(rotation+1)%4,false)==true){
-                y-=100;
-                rotation=(rotation+1)%4;
+            else if(rotation==2){
+                if(check(x+150,y,(rotation+1)%4,false)==true){
+                    x+=150;
+                    rotation=(rotation+1)%4;
+                }
+                else if(check(x,y,(rotation+1)%4,false)==true){
+                    rotation=(rotation+1)%4;
+                }
+                else if(check(x+150,y+50,(rotation+1)%4,false)==true){
+                    x+=150;
+                    y+=50;
+                    rotation=(rotation+1)%4;
+                }
+                else if(check(x,y-100,(rotation+1)%4,false)==true){
+                    y-=100;
+                    rotation=(rotation+1)%4;
+                }
             }
-            else if(check(x-50,y-100,(rotation+1)%4,false)==true){
-                x-=50;
-                y-=100;
-                rotation=(rotation+1)%4;
-            }
-        }
-        else if(rotation==1){
-            if(check(x+50,y,(rotation+1)%4,false)==true){
-                x+=50;
-                rotation=(rotation+1)%4;
-            }
-            else if(check(x+50,y-50,(rotation+1)%4,false)==true){
-                x+=50;
-                y-=50;
-                rotation=(rotation+1)%4;
-            }
-            else if(check(x,y+100,(rotation+1)%4,false)==true){
-                y+=100;
-                rotation=(rotation+1)%4;
-            }
-            else if(check(x+50,y+100,(rotation+1)%4,false)==true){
-                x+=50;
-                y+=100;
-                rotation=(rotation+1)%4;
-            }
-        }
-        else if(rotation==2){
-            if(check(x+50,y,(rotation+1)%4,false)==true){
-                x+=50;
-                rotation=(rotation+1)%4;
-            }
-            else if(check(x+50,y+50,(rotation+1)%4,false)==true){
-                x+=50;
-                y+=50;
-                rotation=(rotation+1)%4;
-            }
-            else if(check(x,y-100,(rotation+1)%4,false)==true){
-                y-=100;
-                rotation=(rotation+1)%4;
-            }
-            else if(check(x+50,y-100,(rotation+1)%4,false)==true){
-                x+=50;
-                y-=100;
-                rotation=(rotation+1)%4;
-            }
-        }
-        else if(rotation==3){
-            if(check(x-50,y,(rotation+1)%4,false)==true){
-                x-=50;
-                rotation=(rotation+1)%4;
-            }
-            else if(check(x-50,y-50,(rotation+1)%4,false)==true){
-                x-=50;
-                y-=50;
-                rotation=(rotation+1)%4;
-            }
-            else if(check(x,y+100,(rotation+1)%4,false)==true){
-                y+=100;
-                rotation=(rotation+1)%4;
-            }
-            else if(check(x-50,y+100,(rotation+1)%4,false)==true){
-                x-=50;
-                y+=100;
-                rotation=(rotation+1)%4;
+            else if(rotation==3){
+                if(check(x+100,y,(rotation+1)%4,false)==true){
+                    x+=100;
+                    rotation=(rotation+1)%4;
+                }
+                else if(check(x-50,y,(rotation+1)%4,false)==true){
+                    x-=50;
+                    rotation=(rotation+1)%4;
+                }
+                else if(check(x+100,y-100,(rotation+1)%4,false)==true){
+                    x+=100;
+                    y-=100;
+                    rotation=(rotation+1)%4;
+                }
+                else if(check(x-50,y+50,(rotation+1)%4,false)==true){
+                    x-=50;
+                    y+=50;
+                    rotation=(rotation+1)%4;
+                }
             }
         }
         ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -816,7 +817,7 @@ function handleShortClick() {
 }
 
 function handleSwipeWhileMoving() {
-    if (pointerCurrentX > pointerStartX + 20) {
+    if (pointerCurrentX > pointerStartX + 30) {
         if (check(x + 50, y, rotation, false) === true) {
             x += 50;
             ctx.clearRect(0, 0, blockCanvas.width, blockCanvas.height);
@@ -825,7 +826,7 @@ function handleSwipeWhileMoving() {
         }
         pointerStartX = pointerCurrentX; // Reset start position to allow continuous swiping
     } 
-    else if (pointerCurrentX < pointerStartX - 20) {
+    else if (pointerCurrentX < pointerStartX - 30) {
         if (check(x - 50, y, rotation, false) === true) {
             x -= 50;
             ctx.clearRect(0, 0, blockCanvas.width, blockCanvas.height);
