@@ -365,7 +365,7 @@ blockCanvas.addEventListener('pointermove', function(event) {
 }, false);
 
 blockCanvas.addEventListener('pointerup', function(event) {
-    if (Math.abs(pointerStartX - pointerCurrentX) < clickThreshold) {
+    if (pointerStartX == pointerCurrentX) {
         rotate();
     }
     pointerStartX = 0; // Reset pointer start position
