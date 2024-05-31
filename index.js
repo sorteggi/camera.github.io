@@ -2,6 +2,7 @@ const canvas = document.getElementById("block");
 const ctx = canvas.getContext("2d");
 const mass = document.getElementById("mass");
 const mtx = mass.getContext("2d");
+
 let popo=0;
 let y=0;
 let x=150;
@@ -700,7 +701,7 @@ document.addEventListener('keydown', function(e) {
 const blockCanvas = document.getElementById('block');
 let pointerStartX = 0;
 let pointerCurrentX = 0;
-let clickThreshold = 5; 
+let clickThreshold = 1; 
 
 blockCanvas.addEventListener('pointerdown', function(event) {
     pointerStartX = event.screenX;
@@ -734,7 +735,7 @@ function handleShortClick() {
 }
 
 function handleSwipeWhileMoving() {
-    if (pointerCurrentX > pointerStartX + 50) {
+    if (pointerCurrentX > pointerStartX + 15) {
         if (check(x + 50, y, rotation, false) === true) {
             x += 50;
             ctx.clearRect(0, 0, blockCanvas.width, blockCanvas.height);
@@ -743,7 +744,7 @@ function handleSwipeWhileMoving() {
         }
         pointerStartX = pointerCurrentX; // Reset start position to allow continuous swiping
     } 
-    else if (pointerCurrentX < pointerStartX - 50) {
+    else if (pointerCurrentX < pointerStartX - 15) {
         if (check(x - 50, y, rotation, false) === true) {
             x -= 50;
             ctx.clearRect(0, 0, blockCanvas.width, blockCanvas.height);
