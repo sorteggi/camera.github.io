@@ -690,8 +690,90 @@ document.addEventListener('keydown', function(e) {
         show();
         lockDelayStart = null;
     }
-    else if (e.key == 'x' && check(x,y,(rotation+1)%4,false)==true) {
-        rotation=(rotation+1)%4;
+    else if (e.key == 'x') {
+        if(check(x,y,(rotation+1)%4,false)==true){
+            rotation=(rotation+1)%4;
+        }
+        else if(rotation==0){
+            if(check(x-50,y,(rotation+1)%4,false)==true){
+                x-=50;
+                rotation=(rotation+1)%4;
+            }
+            else if(check(x-50,y+50,(rotation+1)%4,false)==true){
+                x-=50;
+                y+=50;
+                rotation=(rotation+1)%4;
+            }
+            else if(check(x,y-100,(rotation+1)%4,false)==true){
+                y-=100;
+                rotation=(rotation+1)%4;
+            }
+            else if(check(x-50,y-100,(rotation+1)%4,false)==true){
+                x-=50;
+                y-=100;
+                rotation=(rotation+1)%4;
+            }
+        }
+        else if(rotation==1){
+            if(check(x+50,y,(rotation+1)%4,false)==true){
+                x+=50;
+                rotation=(rotation+1)%4;
+            }
+            else if(check(x+50,y-50,(rotation+1)%4,false)==true){
+                x+=50;
+                y-=50;
+                rotation=(rotation+1)%4;
+            }
+            else if(check(x,y+100,(rotation+1)%4,false)==true){
+                y+=100;
+                rotation=(rotation+1)%4;
+            }
+            else if(check(x+50,y+100,(rotation+1)%4,false)==true){
+                x+=50;
+                y+=100;
+                rotation=(rotation+1)%4;
+            }
+        }
+        else if(rotation==2){
+            if(check(x+50,y,(rotation+1)%4,false)==true){
+                x+=50;
+                rotation=(rotation+1)%4;
+            }
+            else if(check(x+50,y+50,(rotation+1)%4,false)==true){
+                x+=50;
+                y+=50;
+                rotation=(rotation+1)%4;
+            }
+            else if(check(x,y-100,(rotation+1)%4,false)==true){
+                y-=100;
+                rotation=(rotation+1)%4;
+            }
+            else if(check(x+50,y-100,(rotation+1)%4,false)==true){
+                x+=50;
+                y-=100;
+                rotation=(rotation+1)%4;
+            }
+        }
+        else if(rotation==3){
+            if(check(x-50,y,(rotation+1)%4,false)==true){
+                x-=50;
+                rotation=(rotation+1)%4;
+            }
+            else if(check(x-50,y-50,(rotation+1)%4,false)==true){
+                x-=50;
+                y-=50;
+                rotation=(rotation+1)%4;
+            }
+            else if(check(x,y+100,(rotation+1)%4,false)==true){
+                y+=100;
+                rotation=(rotation+1)%4;
+            }
+            else if(check(x-50,y+100,(rotation+1)%4,false)==true){
+                x-=50;
+                y+=100;
+                rotation=(rotation+1)%4;
+            }
+        }
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         show();
         lockDelayStart = null;
