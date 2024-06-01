@@ -28,16 +28,29 @@
         width: 500px; /* Fixed width of the canvas */
         height: 1000px; /* Fixed height of the canvas */
       }
+
+      #info {
+        position: absolute;
+        top: 10px;
+        left: -100px;
+        color: rgb(221, 14, 14);
+        font-family: Arial, sans-serif;
+        font-size: 24px;
+        z-index: 10; /* Ensure the text is on top of the canvases */
+      }
     </style>
   </head>
   <body>
     <div id="tetris-container">
+      <div id="info">
+        Level: <span id="level">1</span> <br>
+        Score: <span id="score">0</span>
+      </div>
       <canvas id="border" width="500" height="1000"></canvas>
       <canvas id="mass" width="500" height="1000"></canvas>
       <canvas id="block" width="500" height="1000"></canvas>
     </div>
     <script>
-      // Prevent touch scrolling on the container
       document.getElementById('tetris-container').addEventListener('touchstart', function(e) {
         e.preventDefault();
       }, { passive: false });
