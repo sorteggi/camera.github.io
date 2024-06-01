@@ -7,6 +7,9 @@ let y=0;
 let x=150;
 let tet=[];
 let rotation=0;
+let level=20;
+let lines=0;
+let score=0;
 mtx.fillStyle = "white";
 mtx.fillRect(1, 1, 500, 1000);
 const sequence = ['I', 'RL', 'L', 'O', 'S', 'RS', 'T'];
@@ -33,7 +36,7 @@ const lockDelayDuration = 500;
 function draw() {
     const currentTime = performance.now();
     const elapsedTime = currentTime - lastFrameTime;
-    if (elapsedTime >= 30) {
+    if (elapsedTime >= level*10) {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         show();
         clear();
@@ -68,6 +71,38 @@ function draw() {
 }
 
 function clear(){
+    let fil;
+    let x=0;
+    for (var row = 0; row < playfield.length-1; row++) {
+        fil=true;
+        for (var col = 0; col < playfield[row].length; col++) {
+            if (playfield[row][col] == 0) {
+                fil=false;
+            }
+        }
+        if(fil){
+            x++;
+        }
+    }
+    lines+=x;
+    console.log(lines);
+    if((lines-(lines%10))/10!=0){
+        level=20-((lines-(lines%10))/10);
+    }
+    if(x==1){
+        score+=100*(21-level);
+    }
+    else if(x==2){
+        score+=300*(21-level);
+    }
+    else if(x==3){
+        score+=500*(21-level);
+    }
+    else if(x==4){
+        score+=800*(21-level);
+    }
+    document.getElementById('level').textContent = 21-level;
+    document.getElementById('score').textContent = score;
     let isFilled;
     for (var row = 0; row < playfield.length-1; row++) {
         isFilled = true;
@@ -83,6 +118,7 @@ function clear(){
             playfield.unshift([1,0,0,0,0,0,0,0,0,0,0,1]);  
         }
     }
+    
 }
 function show(){
     for(let i=0;i<tet.length;i++){
@@ -129,6 +165,7 @@ function check(x1,y1,rot,stop){
     return true;
 }
 function rotate(){
+    lockDelayStart = null;
     if(check(x,y,(rotation+1)%4,false)==true){
         rotation=(rotation+1)%4;
     }
@@ -347,14 +384,18 @@ document.addEventListener('keydown', function(e) {
 
 const blockCanvas = document.getElementById('block');
 let pointerStartX = 0;
+let pointerStartY = 0;
 let pointerCurrentX = 0;
+let pointerCurrentY = 0;
 let isSwiping = false;
 let lastTapTime = 0;
-const tapDebounceTime = 100; // Time in milliseconds to debounce taps
+const tapDebounceTime = 100; // Time in milliseconds to debounce tap
 
 blockCanvas.addEventListener('pointerdown', function(event) {
     pointerStartX = event.screenX;
+    pointerStartY = event.screenY;
     pointerCurrentX = event.screenX;
+    pointerCurrentY = event.screenY;
     isSwiping = false; // Reset swiping flag
     event.preventDefault(); // Prevent any default action
 }, false);
@@ -362,6 +403,7 @@ blockCanvas.addEventListener('pointerdown', function(event) {
 blockCanvas.addEventListener('pointermove', function(event) {
     if (pointerStartX !== 0) {
         pointerCurrentX = event.screenX;
+        pointerCurrentY = event.screenY;
         event.preventDefault();
         handleSwipeWhileMoving();
     }
@@ -369,18 +411,20 @@ blockCanvas.addEventListener('pointermove', function(event) {
 
 blockCanvas.addEventListener('pointerup', function(event) {
     const currentTime = Date.now();
-    if (!isSwiping && pointerStartX === pointerCurrentX) {
+    if (!isSwiping && pointerStartX === pointerCurrentX && pointerStartY === pointerCurrentY) {
         if (currentTime - lastTapTime > tapDebounceTime) {
             rotate();
             lastTapTime = currentTime;
         }
     }
     pointerStartX = 0; // Reset pointer start position
+    pointerStartY = 0; // Reset pointer start position
     event.preventDefault(); // Prevent any default action
 }, false);
 
 function handleSwipeWhileMoving() {
     if (pointerCurrentX > pointerStartX + 20) {
+        // Handle swipe right
         if (check(x + 50, y, rotation, false) === true) {
             x += 50;
             ctx.clearRect(0, 0, blockCanvas.width, blockCanvas.height);
@@ -391,6 +435,7 @@ function handleSwipeWhileMoving() {
         isSwiping = true; // Set swiping flag
     } 
     else if (pointerCurrentX < pointerStartX - 20) {
+        // Handle swipe left
         if (check(x - 50, y, rotation, false) === true) {
             x -= 50;
             ctx.clearRect(0, 0, blockCanvas.width, blockCanvas.height);
@@ -398,6 +443,17 @@ function handleSwipeWhileMoving() {
             lockDelayStart = null;
         }
         pointerStartX = pointerCurrentX; // Reset start position to allow continuous swiping
+        isSwiping = true; // Set swiping flag
+    }
+    else if (pointerCurrentY > pointerStartY + 50) {
+        // Handle swipe down
+        if (check(x, y + 50, rotation, false) === true) {
+            y += 50;
+            ctx.clearRect(0, 0, blockCanvas.width, blockCanvas.height);
+            show();
+            lockDelayStart = null;
+        }
+        pointerStartY = pointerCurrentY; // Reset start position to allow continuous swiping
         isSwiping = true; // Set swiping flag
     }
 }
