@@ -50,6 +50,7 @@ let lastFrameTime = performance.now();
 let lockDelayStart = null;
 const lockDelayDuration = 500;
 function draw() {
+    console.log(level);
     const currentTime = performance.now();
     const elapsedTime = currentTime - lastFrameTime;
     if (elapsedTime >= level*10) {
@@ -718,7 +719,7 @@ let pointerCurrentX = 0;
 let pointerCurrentY = 0;
 let isSwiping = false;
 let lastTapTime = 0;
-const tapDebounceTime = 100; // Time in milliseconds to debounce tap
+const tapDebounceTime = 50; // Time in milliseconds to debounce tap
 
 document.body.addEventListener('pointerdown', function(event) {
     pointerStartX = event.screenX;
@@ -752,6 +753,7 @@ document.body.addEventListener('pointerup', function(event) {
 }, false);
 
 function handleSwipeWhileMoving() {
+    lockDelayStart = null;
     if (pointerCurrentX > pointerStartX + 20) {
         // Handle swipe right
         if (check(x + 50, y, rotation, false) === true) {
@@ -782,6 +784,11 @@ function handleSwipeWhileMoving() {
             show();
             lockDelayStart = null;
         }
+        pointerStartY = pointerCurrentY; // Reset start position to allow continuous swiping
+        isSwiping = true; // Set swiping flag
+    }
+    else if (pointerCurrentY < pointerStartY - 50) {
+        swap();
         pointerStartY = pointerCurrentY; // Reset start position to allow continuous swiping
         isSwiping = true; // Set swiping flag
     }
