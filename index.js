@@ -808,7 +808,7 @@ function handleSwipeWhileMoving() {
         // Handle swipe right
         if (check(x + 50, y, rotation, false) === true) {
             x += 50;
-            ctx.clearRect(0, 0, blockCanvas.width, blockCanvas.height);
+            ctx.clearRect(0, 0, 500, 1000);
             show();
             lockDelayStart = null;
         }
@@ -819,7 +819,7 @@ function handleSwipeWhileMoving() {
         // Handle swipe left
         if (check(x - 50, y, rotation, false) === true) {
             x -= 50;
-            ctx.clearRect(0, 0, blockCanvas.width, blockCanvas.height);
+            ctx.clearRect(0, 0, 500, 1000);
             show();
             lockDelayStart = null;
         }
@@ -830,7 +830,7 @@ function handleSwipeWhileMoving() {
         // Handle swipe down
         if (check(x, y + 50, rotation, false) === true) {
             y += 50;
-            ctx.clearRect(0, 0, blockCanvas.width, blockCanvas.height);
+            ctx.clearRect(0, 0, 500, 1000);
             show();
             lockDelayStart = null;
         }
