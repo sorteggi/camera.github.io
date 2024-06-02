@@ -306,6 +306,7 @@ function check(x1,y1,rot,stop){
 }
 function rotate(){
     lockDelayStart = null;
+    vibrate();
     if(check(x,y,(rotation+1)%4,false)==true){
         rotation=(rotation+1)%4;
     }
@@ -738,18 +739,34 @@ function setlevel(lev){
         lines=0;
     }
     else if(lev==15){
-        lines=50;
+        lines=40;
     }
     else if(lev==10){
-        lines=100;
+        lines=90;
     }
     else if(lev==5){
-        lines=150;
+        lines=140;
     }
     else if(lev==1){
-        lines=200;
+        lines=190;
     }
 }
+function vibrate() {
+    if (!window) {
+        return;
+    }
+
+    if (!window.navigator) {
+        return;
+    }
+
+    if (!window.navigator.vibrate) {
+        return;
+    }
+
+    window.navigator.vibrate(100);
+}
+
 document.addEventListener('keydown', function(e) {
     if (e.key == 'd' && check(x+50,y,rotation,false)==true ) {
         x+=50;
