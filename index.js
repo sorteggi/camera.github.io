@@ -711,7 +711,7 @@ document.addEventListener('keydown', function(e) {
     }
 });
 
-const blockCanvas = document.getElementById('block');
+const blockCanvas = document.getElementById('tetris-container');
 let pointerStartX = 0;
 let pointerStartY = 0;
 let pointerCurrentX = 0;
