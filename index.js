@@ -734,6 +734,21 @@ function assign(){
 }
 function setlevel(lev){
     level=lev;
+    if(lev=20){
+        lines=0;
+    }
+    else if(lev=15){
+        lines=50;
+    }
+    else if(lev=10){
+        lines=100;
+    }
+    else if(lev=5){
+        lines=150;
+    }
+    else if(lev=1){
+        lines=200;
+    }
 }
 document.addEventListener('keydown', function(e) {
     if (e.key == 'd' && check(x+50,y,rotation,false)==true ) {
@@ -804,7 +819,7 @@ document.body.addEventListener('pointerup', function(event) {
 
 function handleSwipeWhileMoving() {
     lockDelayStart = null;
-    if (pointerCurrentX > pointerStartX + 20) {
+    if (pointerCurrentX > pointerStartX + 25) {
         // Handle swipe right
         if (check(x + 50, y, rotation, false) === true) {
             x += 50;
@@ -815,7 +830,7 @@ function handleSwipeWhileMoving() {
         pointerStartX = pointerCurrentX; // Reset start position to allow continuous swiping
         isSwiping = true; // Set swiping flag
     } 
-    else if (pointerCurrentX < pointerStartX - 20) {
+    else if (pointerCurrentX < pointerStartX - 25) {
         // Handle swipe left
         if (check(x - 50, y, rotation, false) === true) {
             x -= 50;
@@ -826,7 +841,7 @@ function handleSwipeWhileMoving() {
         pointerStartX = pointerCurrentX; // Reset start position to allow continuous swiping
         isSwiping = true; // Set swiping flag
     }
-    else if (pointerCurrentY > pointerStartY + 50) {
+    else if (pointerCurrentY > pointerStartY + 30) {
         // Handle swipe down
         if (check(x, y + 50, rotation, false) === true) {
             y += 50;
