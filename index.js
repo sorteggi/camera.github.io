@@ -53,7 +53,7 @@ function draw() {
     console.log(level);
     const currentTime = performance.now();
     const elapsedTime = currentTime - lastFrameTime;
-    if (elapsedTime >= level*10) {
+    if (elapsedTime >= 0) {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         show();
         clear();
