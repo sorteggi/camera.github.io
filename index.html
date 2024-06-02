@@ -33,11 +33,11 @@
     }
 
     .game {
-      position: absolute; /* Position canvases absolutely within the container */
-      top: 0;
-      left: 0;
-      width: 500px; /* Fixed width of the canvas */
-      height: 1000px; /* Fixed height of the canvas */
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      margin-top: -500px; 
+      margin-left: -250px; 
     }
 
     #hold {
@@ -49,6 +49,8 @@
       position: absolute; /* Position canvases absolutely within the container */
       top: 0px;
       left: 510px; /* Move the hold canvas further left */
+      margin-top: 20px; 
+      margin-left: 300px; 
       background-color: white;
     }
   </style>
