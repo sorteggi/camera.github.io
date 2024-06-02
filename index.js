@@ -4,18 +4,21 @@ const mass = document.getElementById("mass");
 const mtx = mass.getContext("2d");
 const hol = document.getElementById("hold");
 const htx = hol.getContext("2d");
+const n = document.getElementById("next");
+const ntx = n.getContext("2d");
 let popo=0;
 let y=0;
 let x=150;
 let tet=[];
 let rotation=0;
 let level=20;
-let lines=190;
+let lines=0;
 let score=0;
 let hold="";
-mtx.fillStyle = "white";
-htx.fillStyle = "white";
-htx.fillRect(0,0,200,200);
+let gg=0;
+mtx.fillStyle = "beige";
+htx.fillStyle = "beige";
+htx.fillRect(0,0,150,150);
 for(let i=0;i<20;i++){
     for(let j=0;j<10;j++){
         mtx.fillRect((50*j)+1, (50*i)+1, 48, 48);
@@ -45,15 +48,17 @@ if(Tetrimino=="I"){
 else if(Tetrimino=="O"){
     x+=50;
 }
+fillnext();
 assign();
 let lastFrameTime = performance.now();
 let lockDelayStart = null;
 const lockDelayDuration = 500;
+
+
 function draw() {
-    console.log(level);
     const currentTime = performance.now();
     const elapsedTime = currentTime - lastFrameTime;
-    if (elapsedTime >= 0) {
+    if (elapsedTime >= level*10) {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         show();
         clear();
@@ -69,16 +74,16 @@ function draw() {
                 mtx.drawImage(ctx.canvas, 0, 0);
                 y = 0;
                 x = 150;
+                gg=0;
                 Tetrimino = sequence1[0];
                 sequence1.splice(0,1);
                 if(sequence2.length==0){
                     sequence2=pieces.slice();
-                    console.log(sequence2);
                     shuffleArray(sequence2);
-                    console.log(sequence2);
                 }
                 sequence1.push(sequence2[0]);
                 sequence2.splice(0,1);
+                fillnext();
                 if(Tetrimino=="I"){
                     x-=50;
                     y-=100;
@@ -95,78 +100,114 @@ function draw() {
     }
     window.requestAnimationFrame(draw);
 }
-function swap(){
-    if(hold==""){
-        rotation = 0;
-        assign();
-        for(let i=0;i<tet.length;i++){
-            for(let j=0;j<tet[i].length;j++){
-                if(tet[i][j]==1){
-                    if(Tetrimino=="O"){
-                        htx.fillRect((j*40)+35,(i*40)+35,40,40);
-                    }
-                    else if(Tetrimino=="I"){
-                        htx.fillRect((j*40)-40,(i*40)-30,40,40);
-                    }
-                    else{
-                        htx.fillRect((j*40)+15,(i*40)+30,40,40);
-                    }
-                }
-            }
-        }
-        hold=Tetrimino;
-        y = 0;
-        x = 150;
-        Tetrimino = sequence1[0];
-        sequence1.splice(0,1);
-        if(sequence2.length==0){
-            sequence2=pieces;
-            shuffleArray(sequence2);
-        }
-        sequence1.push(sequence2[0]);
-        sequence2.splice(0,1);
-        if(Tetrimino=="I"){
-            x-=50;
-            y-=100;
-        }
-        else if(Tetrimino=="O"){
-            x+=50;
-        }
-        assign();
+function fillnext(){
+    ntx.fillStyle = "beige";
+    for(let i=0;i<6;i++){
+        ntx.fillRect(0, (150*i)+1, 150, 148);
     }
-    else{
-        htx.fillStyle="white";
-        htx.fillRect(0,0,200,200);
-        rotation = 0;
+    let oldrotation=rotation;
+    let oldTetrimino=Tetrimino;
+    rotation=0;
+    for(let z=0;z<6;z++){
+        Tetrimino=sequence1[z];
         assign();
         for(let i=0;i<tet.length;i++){
             for(let j=0;j<tet[i].length;j++){
                 if(tet[i][j]==1){
                     if(Tetrimino=="O"){
-                        htx.fillRect((j*40)+35,(i*40)+35,40,40);
+                        ntx.fillRect((j*40)+35,(i*40)+35+(z*150),38,38);
                     }
                     else if(Tetrimino=="I"){
-                        htx.fillRect((j*40)-40,(i*40)-30,40,40);
+                        ntx.fillRect((j*40)-40,(i*40)-30+(z*150),38,38);
                     }
                     else{
-                        htx.fillRect((j*40)+15,(i*40)+30,40,40);
+                        ntx.fillRect((j*40)+15,(i*40)+30+(z*150),38,38);
                     }
                 }
             }
         }
-        let temp=hold;
-        hold=Tetrimino;
-        y = 0;
-        x = 150;
-        Tetrimino = temp;
-        if(Tetrimino=="I"){
-            x-=50;
-            y-=100;
+    }
+    Tetrimino=oldTetrimino;
+    rotation=oldrotation;
+    assign();
+}
+function swap(){
+    if(gg==0){
+        gg=1;
+        if(hold==""){
+            rotation = 0;
+            assign();
+            for(let i=0;i<tet.length;i++){
+                for(let j=0;j<tet[i].length;j++){
+                    if(tet[i][j]==1){
+                        if(Tetrimino=="O"){
+                            htx.fillRect((j*40)+35,(i*40)+35,38,38);
+                        }
+                        else if(Tetrimino=="I"){
+                            htx.fillRect((j*40)-40,(i*40)-30,38,38);
+                        }
+                        else{
+                            htx.fillRect((j*40)+15,(i*40)+30,38,38);
+                        }
+                    }
+                }
+            }
+            hold=Tetrimino;
+            y = 0;
+            x = 150;
+            gg=0;
+            Tetrimino = sequence1[0];
+            sequence1.splice(0,1);
+            if(sequence2.length==0){
+                sequence2=pieces;
+                shuffleArray(sequence2);
+            }
+            sequence1.push(sequence2[0]);
+            sequence2.splice(0,1);
+            fillnext();
+            if(Tetrimino=="I"){
+                x-=50;
+                y-=100;
+            }
+            else if(Tetrimino=="O"){
+                x+=50;
+            }
+            assign();
         }
-        else if(Tetrimino=="O"){
-            x+=50;
+        else{
+            htx.fillStyle="beige";
+            htx.fillRect(0,0,200,200);
+            rotation = 0;
+            assign();
+            for(let i=0;i<tet.length;i++){
+                for(let j=0;j<tet[i].length;j++){
+                    if(tet[i][j]==1){
+                        if(Tetrimino=="O"){
+                            htx.fillRect((j*40)+35,(i*40)+35,38,38);
+                        }
+                        else if(Tetrimino=="I"){
+                            htx.fillRect((j*40)-40,(i*40)-30,38,38);
+                        }
+                        else{
+                            htx.fillRect((j*40)+15,(i*40)+30,38,38);
+                        }
+                    }
+                }
+            }
+            let temp=hold;
+            hold=Tetrimino;
+            y = 0;
+            x = 150;
+            Tetrimino = temp;
+            if(Tetrimino=="I"){
+                x-=50;
+                y-=100;
+            }
+            else if(Tetrimino=="O"){
+                x+=50;
+            }
+            assign();
         }
-        assign();
     }
 }
 function clear(){
@@ -233,7 +274,6 @@ function shuffleArray(array) {
         [array[i], array[j]] = [array[j], array[i]];
     }
 }
-
 function check(x1,y1,rot,stop){
     let te=rotation;
     rotation=rot;
@@ -462,29 +502,36 @@ function assign(){
     if(Tetrimino=="L"){
         htx.fillStyle = "orange";
         ctx.fillStyle = "orange";
+        ntx.fillStyle = "orange";
     }
     else if(Tetrimino=="RL"){
         htx.fillStyle = "blue";
         ctx.fillStyle = "blue";
+        ntx.fillStyle = "blue";
     }
     else if(Tetrimino=="S"){
         htx.fillStyle = "green";
         ctx.fillStyle = "green";
+        ntx.fillStyle = "green";
     }
     else if(Tetrimino=="RS"){
         htx.fillStyle = "red";
         ctx.fillStyle = "red";
+        ntx.fillStyle = "red";
     }
     else if(Tetrimino=="T"){
         htx.fillStyle = "purple";
+        ntx.fillStyle = "purple";
         ctx.fillStyle = "purple";
     }
     else if(Tetrimino=="I"){
         htx.fillStyle = "cyan";
+        ntx.fillStyle = "cyan";
         ctx.fillStyle = "cyan";
     }
     else if(Tetrimino=="O"){
         htx.fillStyle = "yellow";
+        ntx.fillStyle = "yellow";
         ctx.fillStyle = "yellow";
     }
     if(Tetrimino=="L"){
@@ -684,6 +731,9 @@ function assign(){
             [1, 1],
         ];
     }
+}
+function setlevel(lev){
+    level=lev;
 }
 document.addEventListener('keydown', function(e) {
     if (e.key == 'd' && check(x+50,y,rotation,false)==true ) {
