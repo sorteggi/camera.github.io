@@ -734,19 +734,19 @@ function assign(){
 }
 function setlevel(lev){
     level=lev;
-    if(lev=20){
+    if(lev==20){
         lines=0;
     }
-    else if(lev=15){
+    else if(lev==15){
         lines=50;
     }
-    else if(lev=10){
+    else if(lev==10){
         lines=100;
     }
-    else if(lev=5){
+    else if(lev==5){
         lines=150;
     }
-    else if(lev=1){
+    else if(lev==1){
         lines=200;
     }
 }
