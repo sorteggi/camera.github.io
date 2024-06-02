@@ -720,7 +720,7 @@ let isSwiping = false;
 let lastTapTime = 0;
 const tapDebounceTime = 100; // Time in milliseconds to debounce tap
 
-blockCanvas.addEventListener('pointerdown', function(event) {
+document.addEventListener('pointerdown', function(event) {
     pointerStartX = event.screenX;
     pointerStartY = event.screenY;
     pointerCurrentX = event.screenX;
@@ -729,7 +729,7 @@ blockCanvas.addEventListener('pointerdown', function(event) {
     event.preventDefault(); // Prevent any default action
 }, false);
 
-blockCanvas.addEventListener('pointermove', function(event) {
+document.addEventListener('pointermove', function(event) {
     if (pointerStartX !== 0) {
         pointerCurrentX = event.screenX;
         pointerCurrentY = event.screenY;
@@ -738,7 +738,7 @@ blockCanvas.addEventListener('pointermove', function(event) {
     }
 }, false);
 
-blockCanvas.addEventListener('pointerup', function(event) {
+document.addEventListener('pointerup', function(event) {
     const currentTime = Date.now();
     if (!isSwiping && pointerStartX === pointerCurrentX && pointerStartY === pointerCurrentY) {
         if (currentTime - lastTapTime > tapDebounceTime) {
