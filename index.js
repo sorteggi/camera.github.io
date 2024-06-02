@@ -2,26 +2,25 @@ const canvas = document.getElementById("block");
 const ctx = canvas.getContext("2d");
 const mass = document.getElementById("mass");
 const mtx = mass.getContext("2d");
+const hol = document.getElementById("hold");
+const htx = hol.getContext("2d");
 let popo=0;
 let y=0;
 let x=150;
 let tet=[];
 let rotation=0;
 let level=20;
-let lines=0;
+let lines=190;
 let score=0;
+let hold="";
 mtx.fillStyle = "white";
-mtx.fillRect(1, 1, 500, 1000);
-const sequence = ['I', 'RL', 'L', 'O', 'S', 'RS', 'T'];
-let Tetrimino=sequence[getRandomInt(0,7)];
-if(Tetrimino=="I"){
-    x-=50;
-    y-=100;
+htx.fillStyle = "white";
+htx.fillRect(0,0,200,200);
+for(let i=0;i<20;i++){
+    for(let j=0;j<10;j++){
+        mtx.fillRect((50*j)+1, (50*i)+1, 48, 48);
+    }
 }
-else if(Tetrimino=="O"){
-    x+=50;
-}
-let lastFrameTime = performance.now();
 const playfield = [];
 for (let row = -2; row < 20; row++) {
   playfield[row] = [1,0,0,0,0,0,0,0,0,0,0,1];
@@ -30,7 +29,24 @@ playfield[20] = [];
 for (let col = 0; col < 12; col++) {
     playfield[20][col] = 1;
 }
+let pieces = ['I', 'RL', 'L', 'O', 'S', 'RS', 'T'];
+const sequence1 = ['I', 'RL', 'L', 'O', 'S', 'RS', 'T'];
+let sequence2 = ['I', 'RL', 'L', 'O', 'S', 'RS', 'T'];
+shuffleArray(sequence1);
+shuffleArray(sequence2);
+let Tetrimino=sequence1[0];
+sequence1.splice(0,1);
+sequence1.push(sequence2[0]);
+sequence2.splice(0,1);
+if(Tetrimino=="I"){
+    x-=50;
+    y-=100;
+}
+else if(Tetrimino=="O"){
+    x+=50;
+}
 assign();
+let lastFrameTime = performance.now();
 let lockDelayStart = null;
 const lockDelayDuration = 500;
 function draw() {
@@ -52,7 +68,16 @@ function draw() {
                 mtx.drawImage(ctx.canvas, 0, 0);
                 y = 0;
                 x = 150;
-                Tetrimino = sequence[getRandomInt(0, 7)];
+                Tetrimino = sequence1[0];
+                sequence1.splice(0,1);
+                if(sequence2.length==0){
+                    sequence2=pieces.slice();
+                    console.log(sequence2);
+                    shuffleArray(sequence2);
+                    console.log(sequence2);
+                }
+                sequence1.push(sequence2[0]);
+                sequence2.splice(0,1);
                 if(Tetrimino=="I"){
                     x-=50;
                     y-=100;
@@ -69,7 +94,80 @@ function draw() {
     }
     window.requestAnimationFrame(draw);
 }
-
+function swap(){
+    if(hold==""){
+        rotation = 0;
+        assign();
+        for(let i=0;i<tet.length;i++){
+            for(let j=0;j<tet[i].length;j++){
+                if(tet[i][j]==1){
+                    if(Tetrimino=="O"){
+                        htx.fillRect((j*40)+35,(i*40)+35,40,40);
+                    }
+                    else if(Tetrimino=="I"){
+                        htx.fillRect((j*40)-40,(i*40)-30,40,40);
+                    }
+                    else{
+                        htx.fillRect((j*40)+15,(i*40)+30,40,40);
+                    }
+                }
+            }
+        }
+        hold=Tetrimino;
+        y = 0;
+        x = 150;
+        Tetrimino = sequence1[0];
+        sequence1.splice(0,1);
+        if(sequence2.length==0){
+            sequence2=pieces;
+            shuffleArray(sequence2);
+        }
+        sequence1.push(sequence2[0]);
+        sequence2.splice(0,1);
+        if(Tetrimino=="I"){
+            x-=50;
+            y-=100;
+        }
+        else if(Tetrimino=="O"){
+            x+=50;
+        }
+        assign();
+    }
+    else{
+        htx.fillStyle="white";
+        htx.fillRect(0,0,200,200);
+        rotation = 0;
+        assign();
+        for(let i=0;i<tet.length;i++){
+            for(let j=0;j<tet[i].length;j++){
+                if(tet[i][j]==1){
+                    if(Tetrimino=="O"){
+                        htx.fillRect((j*40)+35,(i*40)+35,40,40);
+                    }
+                    else if(Tetrimino=="I"){
+                        htx.fillRect((j*40)-40,(i*40)-30,40,40);
+                    }
+                    else{
+                        htx.fillRect((j*40)+15,(i*40)+30,40,40);
+                    }
+                }
+            }
+        }
+        let temp=hold;
+        hold=Tetrimino;
+        y = 0;
+        x = 150;
+        Tetrimino = temp;
+        if(Tetrimino=="I"){
+            x-=50;
+            y-=100;
+        }
+        else if(Tetrimino=="O"){
+            x+=50;
+        }
+        assign();
+    }
+}
 function clear(){
     let fil;
     let x=0;
@@ -85,7 +183,6 @@ function clear(){
         }
     }
     lines+=x;
-    console.log(lines);
     if((lines-(lines%10))/10!=0){
         level=20-((lines-(lines%10))/10);
     }
@@ -124,16 +221,18 @@ function show(){
     for(let i=0;i<tet.length;i++){
         for(let j=0;j<tet[i].length;j++){
             if(tet[i][j]==1){
-                ctx.fillRect(x+(j*50),y+(i*50),50,50);
+                ctx.fillRect(x+(j*50)+1,y+(i*50)+1,48,48);
             }
         }
     }
 }
-function getRandomInt(min, max) {
-    const minCeiled = Math.ceil(min);
-    const maxFloored = Math.floor(max);
-    return Math.floor(Math.random() * (maxFloored - minCeiled) + minCeiled);
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
 }
+
 function check(x1,y1,rot,stop){
     let te=rotation;
     rotation=rot;
@@ -358,128 +457,33 @@ function rotate(){
     show();
     lockDelayStart = null;
 }
-document.addEventListener('keydown', function(e) {
-    if (e.key == 'd' && check(x+50,y,rotation,false)==true ) {
-        x+=50;
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        show();
-        lockDelayStart = null;
-    }
-    else if (e.key == 'a' && check(x-50,y,rotation,false)==true) {
-        x-=50;
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        show();
-        lockDelayStart = null;
-    }
-    else if (e.key == 's' && check(x,y+50,rotation,false)==true ) {
-        y+=50;
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        show();
-        lockDelayStart = null;
-    }
-    else if (e.key == 'x') {
-        rotate();
-    }
-});
-
-const blockCanvas = document.getElementById('block');
-let pointerStartX = 0;
-let pointerStartY = 0;
-let pointerCurrentX = 0;
-let pointerCurrentY = 0;
-let isSwiping = false;
-let lastTapTime = 0;
-const tapDebounceTime = 100; // Time in milliseconds to debounce tap
-
-blockCanvas.addEventListener('pointerdown', function(event) {
-    pointerStartX = event.screenX;
-    pointerStartY = event.screenY;
-    pointerCurrentX = event.screenX;
-    pointerCurrentY = event.screenY;
-    isSwiping = false; // Reset swiping flag
-    event.preventDefault(); // Prevent any default action
-}, false);
-
-blockCanvas.addEventListener('pointermove', function(event) {
-    if (pointerStartX !== 0) {
-        pointerCurrentX = event.screenX;
-        pointerCurrentY = event.screenY;
-        event.preventDefault();
-        handleSwipeWhileMoving();
-    }
-}, false);
-
-blockCanvas.addEventListener('pointerup', function(event) {
-    const currentTime = Date.now();
-    if (!isSwiping && pointerStartX === pointerCurrentX && pointerStartY === pointerCurrentY) {
-        if (currentTime - lastTapTime > tapDebounceTime) {
-            rotate();
-            lastTapTime = currentTime;
-        }
-    }
-    pointerStartX = 0; // Reset pointer start position
-    pointerStartY = 0; // Reset pointer start position
-    event.preventDefault(); // Prevent any default action
-}, false);
-
-function handleSwipeWhileMoving() {
-    if (pointerCurrentX > pointerStartX + 20) {
-        // Handle swipe right
-        if (check(x + 50, y, rotation, false) === true) {
-            x += 50;
-            ctx.clearRect(0, 0, blockCanvas.width, blockCanvas.height);
-            show();
-            lockDelayStart = null;
-        }
-        pointerStartX = pointerCurrentX; // Reset start position to allow continuous swiping
-        isSwiping = true; // Set swiping flag
-    } 
-    else if (pointerCurrentX < pointerStartX - 20) {
-        // Handle swipe left
-        if (check(x - 50, y, rotation, false) === true) {
-            x -= 50;
-            ctx.clearRect(0, 0, blockCanvas.width, blockCanvas.height);
-            show();
-            lockDelayStart = null;
-        }
-        pointerStartX = pointerCurrentX; // Reset start position to allow continuous swiping
-        isSwiping = true; // Set swiping flag
-    }
-    else if (pointerCurrentY > pointerStartY + 50) {
-        // Handle swipe down
-        if (check(x, y + 50, rotation, false) === true) {
-            y += 50;
-            ctx.clearRect(0, 0, blockCanvas.width, blockCanvas.height);
-            show();
-            lockDelayStart = null;
-        }
-        pointerStartY = pointerCurrentY; // Reset start position to allow continuous swiping
-        isSwiping = true; // Set swiping flag
-    }
-}
-
-
-
 function assign(){
     if(Tetrimino=="L"){
+        htx.fillStyle = "orange";
         ctx.fillStyle = "orange";
     }
     else if(Tetrimino=="RL"){
+        htx.fillStyle = "blue";
         ctx.fillStyle = "blue";
     }
     else if(Tetrimino=="S"){
+        htx.fillStyle = "green";
         ctx.fillStyle = "green";
     }
     else if(Tetrimino=="RS"){
+        htx.fillStyle = "red";
         ctx.fillStyle = "red";
     }
     else if(Tetrimino=="T"){
+        htx.fillStyle = "purple";
         ctx.fillStyle = "purple";
     }
     else if(Tetrimino=="I"){
+        htx.fillStyle = "cyan";
         ctx.fillStyle = "cyan";
     }
     else if(Tetrimino=="O"){
+        htx.fillStyle = "yellow";
         ctx.fillStyle = "yellow";
     }
     if(Tetrimino=="L"){
@@ -680,5 +684,109 @@ function assign(){
         ];
     }
 }
+document.addEventListener('keydown', function(e) {
+    if (e.key == 'd' && check(x+50,y,rotation,false)==true ) {
+        x+=50;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        show();
+        lockDelayStart = null;
+    }
+    else if (e.key == 'a' && check(x-50,y,rotation,false)==true) {
+        x-=50;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        show();
+        lockDelayStart = null;
+    }
+    else if (e.key == 's' && check(x,y+50,rotation,false)==true ) {
+        y+=50;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        show();
+        lockDelayStart = null;
+    }
+    else if (e.key == 'z') {
+        swap();
+    }
+    else if (e.key == 'x') {
+        rotate();
+    }
+});
+
+const blockCanvas = document.getElementById('block');
+let pointerStartX = 0;
+let pointerStartY = 0;
+let pointerCurrentX = 0;
+let pointerCurrentY = 0;
+let isSwiping = false;
+let lastTapTime = 0;
+const tapDebounceTime = 100; // Time in milliseconds to debounce tap
+
+blockCanvas.addEventListener('pointerdown', function(event) {
+    pointerStartX = event.screenX;
+    pointerStartY = event.screenY;
+    pointerCurrentX = event.screenX;
+    pointerCurrentY = event.screenY;
+    isSwiping = false; // Reset swiping flag
+    event.preventDefault(); // Prevent any default action
+}, false);
+
+blockCanvas.addEventListener('pointermove', function(event) {
+    if (pointerStartX !== 0) {
+        pointerCurrentX = event.screenX;
+        pointerCurrentY = event.screenY;
+        event.preventDefault();
+        handleSwipeWhileMoving();
+    }
+}, false);
+
+blockCanvas.addEventListener('pointerup', function(event) {
+    const currentTime = Date.now();
+    if (!isSwiping && pointerStartX === pointerCurrentX && pointerStartY === pointerCurrentY) {
+        if (currentTime - lastTapTime > tapDebounceTime) {
+            rotate();
+            lastTapTime = currentTime;
+        }
+    }
+    pointerStartX = 0; // Reset pointer start position
+    pointerStartY = 0; // Reset pointer start position
+    event.preventDefault(); // Prevent any default action
+}, false);
+
+function handleSwipeWhileMoving() {
+    if (pointerCurrentX > pointerStartX + 20) {
+        // Handle swipe right
+        if (check(x + 50, y, rotation, false) === true) {
+            x += 50;
+            ctx.clearRect(0, 0, blockCanvas.width, blockCanvas.height);
+            show();
+            lockDelayStart = null;
+        }
+        pointerStartX = pointerCurrentX; // Reset start position to allow continuous swiping
+        isSwiping = true; // Set swiping flag
+    } 
+    else if (pointerCurrentX < pointerStartX - 20) {
+        // Handle swipe left
+        if (check(x - 50, y, rotation, false) === true) {
+            x -= 50;
+            ctx.clearRect(0, 0, blockCanvas.width, blockCanvas.height);
+            show();
+            lockDelayStart = null;
+        }
+        pointerStartX = pointerCurrentX; // Reset start position to allow continuous swiping
+        isSwiping = true; // Set swiping flag
+    }
+    else if (pointerCurrentY > pointerStartY + 50) {
+        // Handle swipe down
+        if (check(x, y + 50, rotation, false) === true) {
+            y += 50;
+            ctx.clearRect(0, 0, blockCanvas.width, blockCanvas.height);
+            show();
+            lockDelayStart = null;
+        }
+        pointerStartY = pointerCurrentY; // Reset start position to allow continuous swiping
+        isSwiping = true; // Set swiping flag
+    }
+}
+
+
 
 window.requestAnimationFrame(draw);
