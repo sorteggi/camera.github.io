@@ -67,9 +67,9 @@
     }
     #l1 {
       width:120px;
-      height:50px;
+      height:70px;
       position: absolute;
-      top: 300px;
+      top: 270px;
       left: -160px;
       color: rgb(0, 0, 0);
       font-family: Arial, sans-serif;
@@ -79,9 +79,9 @@
     }
     #l5 {
       width:120px;
-      height:50px;
+      height:70px;
       position: absolute;
-      top: 400px;
+      top: 390px;
       left: -160px;
       color: rgb(0, 0, 0);
       font-family: Arial, sans-serif;
@@ -91,9 +91,9 @@
     }
     #l10 {
       width:120px;
-      height:50px;
+      height:70px;
       position: absolute;
-      top: 500px;
+      top: 510px;
       left: -160px;
       color: rgb(0, 0, 0);
       font-family: Arial, sans-serif;
@@ -103,9 +103,9 @@
     }
     #l15 {
       width:120px;
-      height:50px;
+      height:70px;
       position: absolute;
-      top: 600px;
+      top: 630px;
       left: -160px;
       color: rgb(0, 0, 0);
       font-family: Arial, sans-serif;
@@ -115,9 +115,9 @@
     }
     #l20 {
       width:120px;
-      height:50px;
+      height:70px;
       position: absolute;
-      top: 700px;
+      top: 760px;
       left: -160px;
       color: rgb(0, 0, 0);
       font-family: Arial, sans-serif;
@@ -148,7 +148,9 @@
   </div>
   <script>
     document.getElementById('tetris-container').addEventListener('touchstart', function(e) {
-      e.preventDefault();
+      if (!e.target.matches('button')) {
+        e.preventDefault();
+      }
     }, { passive: false });
   </script>
   <script src="index.js"></script>
