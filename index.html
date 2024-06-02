@@ -14,18 +14,11 @@
       background-color: rgb(0, 0, 4); /* Blue background for the entire screen */
       overflow: hidden; /* Prevent scrolling of the entire page */
     }
-
-    #tetris-container {
-      position: relative;
-      width: 100vh; /* Fixed width of the canvas */
-      height: 100vh; /* Fixed height of the canvas */
-    }
-
     #info {
       position: absolute;
       top: 10px;
       left: -160px;
-      color: rgb(221, 14, 14);
+      color: rgb(62, 192, 45);
       font-family: Arial, sans-serif;
       font-size: 24px;
       z-index: 10; /* Ensure the text is on top of the canvases */
@@ -33,11 +26,11 @@
     }
 
     .game {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      margin-top: -500px; 
-      margin-left: -250px; 
+      position: relative; /* Position canvases absolutely within the container */
+      top: 0;
+      left: 0px;
+      width: 500px; /* Fixed width of the canvas */
+      height: 1000px; /* Fixed height of the canvas */
     }
 
     #hold {
@@ -49,24 +42,22 @@
       position: absolute; /* Position canvases absolutely within the container */
       top: 0px;
       left: 510px; /* Move the hold canvas further left */
-      margin-top: 20px; 
-      margin-left: 300px; 
       background-color: white;
     }
   </style>
 </head>
 <body>
-  <div id="tetris-container">
-    <div id="info">
-      Level: <span id="level">1</span> <br>
-      Score: <span id="score">0</span>
+    <div id="tetris-container"></div>
+      <div id="info">
+        Level: <span id="level">1</span> <br>
+        Score: <span id="score">0</span>
+      </div>
+      <canvas id="hold" width="150" height="150"></canvas>
+      <canvas id="next" width="150" height="900"></canvas>
+      <canvas class="game" id="border" width="500" height="1000"></canvas>
+      <canvas class="game" id="mass" width="500" height="1000"></canvas>
+      <canvas class="game" id="block" width="500" height="1000"></canvas>
     </div>
-    <canvas id="hold" width="150" height="150"></canvas>
-    <canvas id="next" width="150" height="900"></canvas>
-    <canvas class="game" id="border" width="500" height="1000"></canvas>
-    <canvas class="game" id="mass" width="500" height="1000"></canvas>
-    <canvas class="game" id="block" width="500" height="1000"></canvas>
-  </div>
   <script>
     document.getElementById('tetris-container').addEventListener('touchstart', function(e) {
       e.preventDefault();
